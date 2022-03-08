@@ -58,25 +58,32 @@ def triplet_contrastive_loss(x, B_pos, B_neg):
     return loss
 
 
+
+
 class SelfconLoss(nn.Module):
-    def __init__(self):
+    def __init__(self, lam):
         super(SelfconLoss, self).__init__()
-    def forward(self, z_i, z_j):
+        self.lam = lam
+
+    def regularization_loss(self, model):
+        return self.lam / 2 * torch.linalg.matrix_norm(torch.square(torch.matmul(model.linear.weight, model.linear.weight.T)), ord='fro')
+
+    def forward(self, z_i, z_j, model):
         loss = 0
         n = len(z_i)
         for index, (d_i, d_j) in enumerate(zip(z_i, z_j)):
             loss += 2 * torch.dot(d_i, d_j)
-            mask = torch.ones(n)
+            mask = torch.ones(n).double().cuda()
             mask[index] = 0
+
             loss -= torch.dot(torch.matmul(z_i, d_i), mask)/(2 * n - 2)
             loss -= torch.dot(torch.matmul(z_i, d_j), mask)/(2 * n - 2)
             loss -= torch.dot(torch.matmul(z_j, d_i), mask)/(2 * n - 2)
             loss -= torch.dot(torch.matmul(z_j, d_j), mask)/(2 * n - 2)
         loss = -loss / (2 * n)
+        loss += self.regularization_loss(model)
         return loss
 
-def regularization_loss(model):
-    print(model.linear.weight.size())
 
 class DataHandler(Dataset):
     def generate_random_mask(self, size):
@@ -96,7 +103,7 @@ class DataHandler(Dataset):
     def __len__(self):
         return len(self.X)
 
-def train(train_loader, model, criterion, optimizer):
+def train(train_loader, model, criterion, optimizer, loss_fn):
     loss_epoch = 0
     for step, (x_i, x_j) in enumerate(train_loader):
         optimizer.zero_grad()
@@ -106,14 +113,13 @@ def train(train_loader, model, criterion, optimizer):
         # positive pair, with encoding
         z_i = model(x_i)
         z_j = model(x_j)
-
-        loss = criterion(z_i, z_j)
+        if loss_fn == "NTXENT":
+            loss = criterion(z_i, z_j)
+        else:
+            loss = criterion(z_i, z_j, model)
         loss.backward()
 
         optimizer.step()
-        if step % 50 == 0:
-            print(f"Step [{step}/{len(train_loader)}]\t Loss: {loss.item()}")
-
         loss_epoch += loss.item()
     return loss_epoch
 
@@ -127,7 +133,7 @@ class linear_CL_Model(torch.nn.Module):
         out = self.linear(x)
         return out
 
-def contrastive_training(r, d, x, loss_fn, batch_size=32, num_epochs=10, lr=3e-4):
+def contrastive_training(r, d, x, loss_fn, batch_size, num_epochs, lr, lam):
     # Data Loader
     x = torch.tensor(x)
     print(f"Train Data Shape: {x.size()}")
@@ -140,9 +146,9 @@ def contrastive_training(r, d, x, loss_fn, batch_size=32, num_epochs=10, lr=3e-4
     if loss_fn == "NTXENT":
         criterion = NT_Xent(batch_size, 0.5, 1)
     else:
-        criterion = SelfconLoss()
+        criterion = SelfconLoss(lam)
     for epoch in range(num_epochs):
-        loss_epoch = train(train_loader, model, criterion, optimizer)
+        loss_epoch = train(train_loader, model, criterion, optimizer, loss_fn)
         print(f"Epoch [{epoch}/{num_epochs}]\t Loss: {loss_epoch / len(train_loader)}\t")
     return model
 

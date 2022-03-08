@@ -13,7 +13,7 @@ parser.add_argument("--ckptfldr", default="v0", help="Folder for Saving Files")
 parser.add_argument("--cuda", action="store_true", help="Use CUDA")
 parser.add_argument("--gpus", default="0,1", help="GPU Device ID to use separated by commas")
 parser.add_argument("--seed", default=0, help="Random seed to allow replication of results")
-parser.add_argument("--num_unsup_datapoints", type=int, default=1000, help="Number of data points of unsupervised learning")
+
 
 ## Parameters for Data Generation
 parser.add_argument("--r", type=int, default=10, help="Representation Dimension of Original Signal")
@@ -24,6 +24,8 @@ parser.add_argument("--sigma", type=float, default=1.0, help="Standard Deviation
 ## Add more and change as required
 parser.add_argument("--lr", type=float, default=3e-4, help="Learning rate")
 parser.add_argument("--steps", type=int, default=50000, help="Number of Steps for Training")
+parser.add_argument("--num_unsup_datapoints", type=int, default=1000, help="Number of data points of unsupervised learning")
+parser.add_argument("--lam", type=float, default=1e-3, help="Weight of regularization term")
 
 args = parser.parse_args()
 
@@ -43,7 +45,7 @@ if args.mode=='train':
     elif args.model=='cl':
         ## Call contrastive learning trainer
         model = contrastive_training(args.r, args.d, X, loss_fn="NTXENT",
-                                     batch_size=32, num_epochs=args.steps, lr=args.lr)
+                                     batch_size=32, num_epochs=args.steps, lr=args.lr, lam=args.lam)
 elif args.mode=='test':
     # Test performances
     ## Call test data generator
