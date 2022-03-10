@@ -6,7 +6,10 @@ import torch
 
 from contrastive_learning import contrastive_training
 from data_generator import SpikedCovarianceDataset
-from test_utils import sinedistance_eigenvectors
+from test_utils import sinedistance_eigenvectors, classification_score
+from downstream import svm_classifier
+
+downstream_task_name = {'cls': 'Classification', 'reg': 'Regression'}
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--mode", default="train", help="Set Experiment Mode")
@@ -27,8 +30,13 @@ parser.add_argument("--sigma", type=float, default=1.0, help="Standard Deviation
 parser.add_argument("--lr", type=float, default=3e-4, help="Learning rate")
 parser.add_argument("--batch_size", type=int, default=32, help="Batch Size for Training")
 parser.add_argument("--epochs", type=int, default=1000, help="Number of Steps for Training")
-parser.add_argument("--num_unsup_datapoints", type=int, default=1000, help="Number of data points of unsupervised learning")
+parser.add_argument("--train_size", type=int, default=10000, help="Number of data points of unsupervised learning")
+parser.add_argument("--test_size", type=int, default=1000, help="Number of data points of testing")
 parser.add_argument("--lam", type=float, default=1e-3, help="Weight of regularization term")
+
+## Parameters for Downstream Task
+parser.add_argument("--dwn_mode", default="cls", help="Classification mode for downstream labels")
+parser.add_argument("--dwn_model", default="svm", help="Use SVM model for downstream classification")
 
 args = parser.parse_args()
 
@@ -39,9 +47,10 @@ torch.manual_seed(int(args.seed))
 
 ## Call data generator
 generator = SpikedCovarianceDataset(args.r, args.d, args.sigma, label_mode='classification')
+X_train, y_train = generator.get_next_batch(batch_size=args.train_size)
+X_test, y_test = generator.get_next_batch(batch_size=args.test_size)
 
 if args.mode=='train':
-    X, y = generator.get_next_batch(batch_size=args.num_unsup_datapoints)
     if args.model=='ae':
         ## Call autoencoder trainer
         pass
@@ -53,7 +62,6 @@ if args.mode=='train':
         torch.save(model, os.path.join(args.ckptfldr, 'cl_baseline.pth'))
 
 elif args.mode=='test':
-    X, y = generator.get_next_batch(batch_size=args.num_unsup_datapoints)
     if args.model=='ae':
         ## Call appropriate parameter and model extractor
         pass
@@ -61,15 +69,22 @@ elif args.mode=='test':
         ## Load Model
         model = torch.load(os.path.join(args.ckptfldr, 'cl_baseline.pth'))
         ## Call appropriate parameter extractor
-        wcl = model.linear.weight.cpu().detach().numpy()
+        weight_matrix = model.linear.weight.cpu().detach().numpy()
 
     ## Test matrix U-star
-    sinedistance_score = sinedistance_eigenvectors(generator.get_ustar(), wcl)
-    print("Sine Distance to U* : ", sinedistance_score)
+    sinedistance_score = sinedistance_eigenvectors(generator.get_ustar(), weight_matrix)
+    print("Sine Distance to U* : %f" % sinedistance_score)
 
     ## Test final prediction accuracy
+    representations_train = np.matmul(X_train, weight_matrix.T)
+    representations_test = np.matmul(X_test, weight_matrix.T)
 
-    ## Print Results or Visualize
-    ## Suggestion : For complicated visualizations, if possible create a separate mode
+    if args.dwn_mode=='cls':
+        if args.dwn_model=='svm':
+            predicted_labels = svm_classifier(representations_train, y_train, representations_test)
+
+        final_score = classification_score(y_test, predicted_labels, mode='acc')
+
+    print("%s Task Score : %f" % (downstream_task_name[args.dwn_mode], final_score))
 
 ## Add more modes if required
