@@ -3,8 +3,10 @@ import os
 import numpy as np
 import random
 import torch
+
 from contrastive_learning import contrastive_training
 from data_generator import SpikedCovarianceDataset
+from test_utils import sinedistance_eigenvectors
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--mode", default="train", help="Set Experiment Mode")
@@ -23,21 +25,22 @@ parser.add_argument("--sigma", type=float, default=1.0, help="Standard Deviation
 ## Parameters for Training
 ## Add more and change as required
 parser.add_argument("--lr", type=float, default=3e-4, help="Learning rate")
-parser.add_argument("--steps", type=int, default=50000, help="Number of Steps for Training")
+parser.add_argument("--batch_size", type=int, default=32, help="Batch Size for Training")
+parser.add_argument("--epochs", type=int, default=1000, help="Number of Steps for Training")
 parser.add_argument("--num_unsup_datapoints", type=int, default=1000, help="Number of data points of unsupervised learning")
 parser.add_argument("--lam", type=float, default=1e-3, help="Weight of regularization term")
 
 args = parser.parse_args()
 
 os.environ["CUDA_VISIBLE_DEVICES"] = args.gpus
-np.random.seed(args.seed)
-random.seed(args.seed)
-torch.manual_seed(args.seed)
+np.random.seed(int(args.seed))
+random.seed(int(args.seed))
+torch.manual_seed(int(args.seed))
+
+## Call data generator
+generator = SpikedCovarianceDataset(args.r, args.d, args.sigma, label_mode='classification')
 
 if args.mode=='train':
-    # Train Model
-    ## Call data generator
-    generator = SpikedCovarianceDataset(args.r, args.d, args.sigma, label_mode='classification')
     X, y = generator.get_next_batch(batch_size=args.num_unsup_datapoints)
     if args.model=='ae':
         ## Call autoencoder trainer
@@ -45,19 +48,24 @@ if args.mode=='train':
     elif args.model=='cl':
         ## Call contrastive learning trainer
         model = contrastive_training(args.r, args.d, X, loss_fn="NTXENT",
-                                     batch_size=32, num_epochs=args.steps, lr=args.lr, lam=args.lam)
-elif args.mode=='test':
-    # Test performances
-    ## Call test data generator
+                                     batch_size=args.batch_size, num_epochs=args.epochs, lr=args.lr, lam=args.lam)
+        ## Save Model
+        torch.save(model, os.path.join(args.ckptfldr, 'cl_baseline.pth'))
 
+elif args.mode=='test':
+    X, y = generator.get_next_batch(batch_size=args.num_unsup_datapoints)
     if args.model=='ae':
         ## Call appropriate parameter and model extractor
         pass
     elif args.model=='cl':
-        ## Call appropriate parameter and model extractor
-        pass
+        ## Load Model
+        model = torch.load(os.path.join(args.ckptfldr, 'cl_baseline.pth'))
+        ## Call appropriate parameter extractor
+        wcl = model.linear.weight.cpu().detach().numpy()
 
     ## Test matrix U-star
+    sinedistance_score = sinedistance_eigenvectors(generator.get_ustar(), wcl)
+    print("Sine Distance to U* : ", sinedistance_score)
 
     ## Test final prediction accuracy
 

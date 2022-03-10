@@ -7,6 +7,7 @@ from PIL import Image
 import torch.nn as nn
 from sklearn.manifold import TSNE
 from matplotlib import pyplot as plt
+from tqdm import tqdm
 
 
 class NT_Xent(nn.Module):
@@ -147,8 +148,10 @@ def contrastive_training(r, d, x, loss_fn, batch_size, num_epochs, lr, lam):
         criterion = NT_Xent(batch_size, 0.5, 1)
     else:
         criterion = SelfconLoss(lam)
-    for epoch in range(num_epochs):
-        loss_epoch = train(train_loader, model, criterion, optimizer, loss_fn)
-        print(f"Epoch [{epoch}/{num_epochs}]\t Loss: {loss_epoch / len(train_loader)}\t")
-    return model
 
+    epoch_iterator = tqdm(range(num_epochs), desc='Epochs', position=0)
+    loss_log = tqdm(total=0, position=1, bar_format='{desc}')
+    for epoch in epoch_iterator:
+        loss_epoch = train(train_loader, model, criterion, optimizer, loss_fn)
+        loss_log.set_description_str(f"Epoch [{epoch}/{num_epochs}] Loss: {loss_epoch / len(train_loader)}")
+    return model
