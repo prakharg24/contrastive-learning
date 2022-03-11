@@ -24,7 +24,7 @@ parser.add_argument("--seed", default=0, help="Random seed to allow replication 
 ## Parameters for Data Generation
 parser.add_argument("--r", type=int, default=10, help="Representation Dimension of Original Signal")
 parser.add_argument("--d", type=int, default=40, help="Representation Dimension of Generated Input")
-parser.add_argument("--sigma", type=float, default=1.0, help="Standard Deviation of original signal")
+parser.add_argument("--sigma", type=float, default=100., help="Standard Deviation of original signal")
 
 ## Parameters for Training
 ## Add more and change as required
@@ -48,8 +48,8 @@ torch.manual_seed(int(args.seed))
 
 ## Call data generator
 generator = SpikedCovarianceDataset(args.r, args.d, args.sigma, label_mode=args.dwn_mode)
-X_train, y_train = generator.get_next_batch(batch_size=args.train_size)
-X_test, y_test = generator.get_next_batch(batch_size=args.test_size)
+X_train, y_train, r_train = generator.get_next_batch(batch_size=args.train_size)
+X_test, y_test, r_test = generator.get_next_batch(batch_size=args.test_size)
 
 if args.mode=='train':
     if args.model=='ae':
@@ -105,4 +105,23 @@ elif args.mode=='test':
 
     print("%s Task Score : %f" % (downstream_task_name[args.dwn_mode], final_score))
 
+elif args.mode=='gold':
+
+    if args.dwn_mode=='cls':
+        if args.dwn_model=='svm':
+            predicted_labels = svm_classifier(r_train, y_train, r_test)
+        else:
+            raise Exception("Classification Model specified is not Implemented")
+
+        final_score = classification_score(y_test, predicted_labels, mode='acc')
+
+    elif args.dwn_mode=='reg':
+        if args.dwn_model=='linear':
+            predicted_labels = linear_regressor(r_train, y_train, r_test)
+        else:
+            raise Exception("Regression Model specified is not Implemented")
+
+        final_score = regression_score(y_test, predicted_labels, mode='rmse')
+
+    print("%s Task Score : %f" % (downstream_task_name[args.dwn_mode], final_score))
 ## Add more modes if required
