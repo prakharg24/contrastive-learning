@@ -84,6 +84,9 @@ elif args.mode=='test':
     sinedistance_score = sinedistance_eigenvectors(generator.get_ustar(), weight_matrix)
     print("Sine Distance to U* : %f" % sinedistance_score)
 
+    weight_matrix = weight_matrix.T
+    representations_train = np.matmul(X_train, weight_matrix)
+    representations_test = np.matmul(X_test, weight_matrix)
     downstream_score(args.dwn_mode, args.dwn_model,
                      representations_train, y_train,
                      representations_test, y_test)

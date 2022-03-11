@@ -85,6 +85,6 @@ def auto_encoder(d, r, X, batch_size, num_epochs, lr, single_layer, requires_rel
             loss = criterion(prediction, batch_data)
             loss.backward()
             optimizer.step()
-            loss_log.set_description_str(f"Epoch [{epoch}/{num_epochs}] Loss: {loss / len(train_dataloader)}")
+            loss_log.set_description_str(f"Epoch [{epoch+1}/{num_epochs}] Loss: {loss / len(train_dataloader)}")
 
     return model

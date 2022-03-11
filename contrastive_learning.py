@@ -153,5 +153,5 @@ def contrastive_training(r, d, x, loss_fn, batch_size, num_epochs, lr, lam, cuda
     loss_log = tqdm(total=0, position=1, bar_format='{desc}')
     for epoch in epoch_iterator:
         loss_epoch = train(train_loader, model, criterion, optimizer, loss_fn)
-        loss_log.set_description_str(f"Epoch [{epoch}/{num_epochs}] Loss: {loss_epoch / len(train_loader)}")
+        loss_log.set_description_str(f"Epoch [{epoch+1}/{num_epochs}] Loss: {loss_epoch / len(train_loader)}")
     return model
