@@ -60,7 +60,7 @@ def sequential_linear_block(in_layers, out_layers, requires_relu=False):
         return nn.Sequential(nn.Linear(in_layers, out_layers, bias=False),
                         nn.ReLU())
     else:
-        return nn.Linear(in_layers, out_layers)
+        return nn.Linear(in_layers, out_layers, bias=False)
 
 
 def auto_encoder(d, r, X, batch_size, num_epochs, lr, single_layer, requires_relu):
