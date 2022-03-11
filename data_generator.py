@@ -13,7 +13,7 @@ class SpikedCovarianceDataset():
 
         ## Creating Optimal Classifier Vector w*
         self.wstar = np.random.rand(r)
-        self.wstar = self.wstar / np.sum(self.wstar)
+        self.wstar = self.wstar / np.linalg.norm(self.wstar)
 
         ## Setting label mode to 'classification' or 'regression'
         self.label_mode = label_mode
@@ -32,19 +32,19 @@ class SpikedCovarianceDataset():
         input_features = input_features.T # Make batch size first dimension
 
         ## Calculate Inner Product Normalized <z, w*>/v
-        inner_product = np.matmul(self.wstar, signal)/self.sigma
+        inner_product = np.matmul(self.wstar, signal)
         if self.label_mode=='cls':
             ## Output labels selected from bernoulli distribution with selected probabilities
             bernoulli_mean = 1/(1 + np.exp(-inner_product))
             output_labels = np.random.binomial(1, bernoulli_mean, size=batch_size)
         elif self.label_mode=='reg':
             ## Output labels with some regression error e
-            regression_error = noise = np.random.normal(0., self.sigma/10., batch_size)
+            regression_error = np.random.normal(0., self.sigma/10., batch_size)
             output_labels = inner_product + regression_error
         else:
             raise Exception("Label Mode Not Correct")
 
-        return input_features, output_labels
+        return input_features, output_labels, signal.T
 
     def get_ustar(self):
         ## To extract the original matrix U* for comparison
