@@ -134,7 +134,7 @@ class linear_CL_Model(torch.nn.Module):
         out = self.linear(x)
         return out
 
-def contrastive_training(r, d, x, loss_fn, batch_size, num_epochs, lr, lam):
+def contrastive_training(r, d, x, loss_fn, batch_size, num_epochs, lr, lam, cuda=True):
     # Data Loader
     x = torch.tensor(x)
     print(f"Train Data Shape: {x.size()}")

@@ -19,8 +19,8 @@ POTENTIAL CHANGES FOR EXPERIMENTS:
 class AutoEncoder(nn.Module):
     def __init__(self, d, r, single_layer, requires_relu):
         super(AutoEncoder, self).__init__()
-        
-        self.input_dim = d 
+
+        self.input_dim = d
         self.latent_dim = r
         self.requires_relu = requires_relu
         self.single_layer = single_layer
@@ -63,9 +63,9 @@ def sequential_linear_block(in_layers, out_layers, requires_relu=False):
         return nn.Linear(in_layers, out_layers, bias=False)
 
 
-def auto_encoder(d, r, X, batch_size, num_epochs, lr, single_layer, requires_relu):
+def auto_encoder(d, r, X, batch_size, num_epochs, lr, single_layer, requires_relu, cuda=True):
     X = torch.Tensor(X)
-    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    device = 'cuda' if cuda else 'cpu'
 
     # Load training data
     train_dataloader = DataLoader(X, batch_size=batch_size, shuffle=True, num_workers=4, drop_last=True)

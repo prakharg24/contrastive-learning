@@ -7,10 +7,7 @@ import torch
 from contrastive_learning import contrastive_training
 from autoencoder import auto_encoder
 from data_generator import SpikedCovarianceDataset
-from test_utils import sinedistance_eigenvectors, classification_score, regression_score
-from downstream import svm_classifier, linear_regressor
-
-downstream_task_name = {'cls': 'Classification', 'reg': 'Regression'}
+from test_utils import sinedistance_eigenvectors, downstream_score
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--mode", default="train", help="Set Experiment Mode")
@@ -28,6 +25,7 @@ parser.add_argument("--sigma", type=float, default=100., help="Standard Deviatio
 
 ## Parameters for Training
 ## Add more and change as required
+parser.add_argument("--r_model", type=int, default=10, help="Representation Dimension of Model Output")
 parser.add_argument("--lr", type=float, default=3e-4, help="Learning rate")
 parser.add_argument("--batch_size", type=int, default=32, help="Batch Size for Training")
 parser.add_argument("--epochs", type=int, default=1000, help="Number of Steps for Training")
@@ -53,13 +51,16 @@ X_test, y_test, r_test = generator.get_next_batch(batch_size=args.test_size)
 
 if args.mode=='train':
     if args.model=='ae':
-        model = auto_encoder(args.d, args.r, X_train, batch_size=args.batch_size, num_epochs=args.epochs, lr=args.lr, single_layer=True, requires_relu=False)
+        model = auto_encoder(args.d, args.r_model, X_train,
+                             batch_size=args.batch_size, num_epochs=args.epochs, lr=args.lr,
+                             single_layer=True, requires_relu=False, cuda=args.cuda)
         torch.save(model, os.path.join(args.ckptfldr, 'ae_baseline.pt'))
 
     elif args.model=='cl':
         ## Call contrastive learning trainer
-        model = contrastive_training(args.r, args.d, X_train, loss_fn="NTXENT",
-                                     batch_size=args.batch_size, num_epochs=args.epochs, lr=args.lr, lam=args.lam)
+        model = contrastive_training(args.r_model, args.d, X_train, loss_fn="NTXENT",
+                                     batch_size=args.batch_size, num_epochs=args.epochs,
+                                     lr=args.lr, lam=args.lam, cuda=args.cuda)
         ## Save Model
         torch.save(model, os.path.join(args.ckptfldr, 'cl_baseline.pth'))
 
@@ -83,45 +84,14 @@ elif args.mode=='test':
     sinedistance_score = sinedistance_eigenvectors(generator.get_ustar(), weight_matrix)
     print("Sine Distance to U* : %f" % sinedistance_score)
 
-    ## Test final prediction accuracy
-    representations_train = np.matmul(X_train, weight_matrix.T)
-    representations_test = np.matmul(X_test, weight_matrix.T)
-
-    if args.dwn_mode=='cls':
-        if args.dwn_model=='svm':
-            predicted_labels = svm_classifier(representations_train, y_train, representations_test)
-        else:
-            raise Exception("Classification Model specified is not Implemented")
-
-        final_score = classification_score(y_test, predicted_labels, mode='acc')
-
-    elif args.dwn_mode=='reg':
-        if args.dwn_model=='linear':
-            predicted_labels = linear_regressor(representations_train, y_train, representations_test)
-        else:
-            raise Exception("Regression Model specified is not Implemented")
-
-        final_score = regression_score(y_test, predicted_labels, mode='rmse')
-
-    print("%s Task Score : %f" % (downstream_task_name[args.dwn_mode], final_score))
+    downstream_score(args.dwn_mode, args.dwn_model,
+                     representations_train, y_train,
+                     representations_test, y_test)
 
 elif args.mode=='gold':
 
-    if args.dwn_mode=='cls':
-        if args.dwn_model=='svm':
-            predicted_labels = svm_classifier(r_train, y_train, r_test)
-        else:
-            raise Exception("Classification Model specified is not Implemented")
+    downstream_score(args.dwn_mode, args.dwn_model,
+                     r_train, y_train,
+                     r_test, y_test)
 
-        final_score = classification_score(y_test, predicted_labels, mode='acc')
-
-    elif args.dwn_mode=='reg':
-        if args.dwn_model=='linear':
-            predicted_labels = linear_regressor(r_train, y_train, r_test)
-        else:
-            raise Exception("Regression Model specified is not Implemented")
-
-        final_score = regression_score(y_test, predicted_labels, mode='rmse')
-
-    print("%s Task Score : %f" % (downstream_task_name[args.dwn_mode], final_score))
 ## Add more modes if required

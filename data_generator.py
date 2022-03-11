@@ -32,7 +32,7 @@ class SpikedCovarianceDataset():
         input_features = input_features.T # Make batch size first dimension
 
         ## Calculate Inner Product Normalized <z, w*>/v
-        inner_product = np.matmul(self.wstar, signal)
+        inner_product = np.matmul(self.wstar, signal)/self.sigma
         if self.label_mode=='cls':
             ## Output labels selected from bernoulli distribution with selected probabilities
             bernoulli_mean = 1/(1 + np.exp(-inner_product))
