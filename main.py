@@ -53,7 +53,7 @@ X_test, y_test = generator.get_next_batch(batch_size=args.test_size)
 
 if args.mode=='train':
     if args.model=='ae':
-        model = auto_encoder(args.d, args.r, X_train, batch_size=args.batch_size, num_epochs=args.epochs, lr=args.lr)
+        model = auto_encoder(args.d, args.r, X_train, batch_size=args.batch_size, num_epochs=args.epochs, lr=args.lr, single_layer=True, requires_relu=False)
         torch.save(model, os.path.join(args.ckptfldr, 'ae_baseline.pt'))
 
     elif args.model=='cl':
@@ -66,7 +66,12 @@ if args.mode=='train':
 elif args.mode=='test':
     if args.model=='ae':
         model = torch.load(os.path.join(args.ckptfldr, 'ae_baseline.pt'))
-        weight_matrix = model.encoder.weight.cpu().detach().numpy()
+        if model.single_layer:
+            weight_matrix = model.encoder.weight.cpu().detach().numpy()
+        else:
+            weight_matrix = np.identity(args.d)
+            for layer in model.encoder:
+                weight_matrix = np.matmul(weight_matrix, layer.weight.cpu().detach().numpy())
 
     elif args.model=='cl':
         ## Load Model

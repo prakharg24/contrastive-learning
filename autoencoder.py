@@ -17,26 +17,32 @@ POTENTIAL CHANGES FOR EXPERIMENTS:
 '''
 
 class AutoEncoder(nn.Module):
-    def __init__(self, d, r):
+    def __init__(self, d, r, single_layer, requires_relu):
         super(AutoEncoder, self).__init__()
         
         self.input_dim = d 
         self.latent_dim = r
+        self.requires_relu = requires_relu
+        self.single_layer = single_layer
 
-        layer_dim = [self.input_dim]
-        hidden_dim = 2**math.ceil(math.log(self.input_dim, 2))
-        layer_dim.append(hidden_dim)
-        while hidden_dim > self.latent_dim:
-            hidden_dim = int(max(self.latent_dim, hidden_dim/2))
+        if(self.single_layer):
+            self.encoder = nn.Linear(d, r, bias=False)
+            self.decoder = nn.Linear(r, d, bias=False)
+        else:
+            layer_dim = [self.input_dim]
+            hidden_dim = 2**math.ceil(math.log(self.input_dim, 2))
             layer_dim.append(hidden_dim)
+            while hidden_dim > self.latent_dim:
+                hidden_dim = int(max(self.latent_dim, hidden_dim/2))
+                layer_dim.append(hidden_dim)
 
-        num_layers = len(layer_dim)
-        encoder_layers = [sequential_linear_block(in_layers, out_layers) for in_layers, out_layers in zip(layer_dim[:num_layers-1], layer_dim[1:num_layers-1])]
-        self.encoder = nn.Sequential(*encoder_layers, nn.Linear(2**math.ceil(math.log(self.latent_dim, 2)), self.latent_dim))
+            num_layers = len(layer_dim)
+            encoder_layers = [sequential_linear_block(in_layers, out_layers, requires_relu) for in_layers, out_layers in zip(layer_dim[:num_layers-1], layer_dim[1:num_layers-1])]
+            self.encoder = nn.Sequential(*encoder_layers, nn.Linear(2**math.ceil(math.log(self.latent_dim, 2)), self.latent_dim))
 
-        layer_dim.reverse()
-        decoder_layers = [sequential_linear_block(in_layers, out_layers) for in_layers, out_layers in zip(layer_dim[:num_layers-1], layer_dim[1:num_layers-1])]
-        self.decoder = nn.Sequential(*decoder_layers, nn.Linear(2**math.ceil(math.log(self.input_dim, 2)), self.input_dim))
+            layer_dim.reverse()
+            decoder_layers = [sequential_linear_block(in_layers, out_layers, requires_relu) for in_layers, out_layers in zip(layer_dim[:num_layers-1], layer_dim[1:num_layers-1])]
+            self.decoder = nn.Sequential(*decoder_layers, nn.Linear(2**math.ceil(math.log(self.input_dim, 2)), self.input_dim))
 
     def forward(self, x):
         latent_rep = self.encoder(x)
@@ -49,19 +55,22 @@ class AutoEncoder(nn.Module):
 
         return latent_rep
 
-def sequential_linear_block(in_layers, out_layers):
-    return nn.Sequential(nn.Linear(in_layers, out_layers),
+def sequential_linear_block(in_layers, out_layers, requires_relu=False):
+    if requires_relu:
+        return nn.Sequential(nn.Linear(in_layers, out_layers, bias=False),
                         nn.ReLU())
+    else:
+        return nn.Linear(in_layers, out_layers)
 
 
-def auto_encoder(d, r, X, batch_size, num_epochs, lr):
+def auto_encoder(d, r, X, batch_size, num_epochs, lr, single_layer, requires_relu):
     X = torch.Tensor(X)
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
     # Load training data
     train_dataloader = DataLoader(X, batch_size=batch_size, shuffle=True, num_workers=4, drop_last=True)
     # Model
-    model = AutoEncoder(d, r)
+    model = AutoEncoder(d, r, single_layer, requires_relu)
     print(model)
     optimizer = optim.Adam(model.parameters(), lr)
     criterion = nn.MSELoss()
