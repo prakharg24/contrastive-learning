@@ -5,6 +5,7 @@ import random
 import torch
 
 from contrastive_learning import contrastive_training
+from autoencoder import auto_encoder
 from data_generator import SpikedCovarianceDataset
 from test_utils import sinedistance_eigenvectors, classification_score
 from downstream import svm_classifier
@@ -52,19 +53,21 @@ X_test, y_test = generator.get_next_batch(batch_size=args.test_size)
 
 if args.mode=='train':
     if args.model=='ae':
-        ## Call autoencoder trainer
-        pass
+        model = auto_encoder(args.d, args.r, X_train, batch_size=args.batch_size, num_epochs=args.epochs, lr=args.lr)
+        torch.save(model, os.path.join(args.ckptfldr, 'ae_baseline.pt'))
+
     elif args.model=='cl':
         ## Call contrastive learning trainer
-        model = contrastive_training(args.r, args.d, X, loss_fn="NTXENT",
+        model = contrastive_training(args.r, args.d, X_train, loss_fn="NTXENT",
                                      batch_size=args.batch_size, num_epochs=args.epochs, lr=args.lr, lam=args.lam)
         ## Save Model
         torch.save(model, os.path.join(args.ckptfldr, 'cl_baseline.pth'))
 
 elif args.mode=='test':
     if args.model=='ae':
-        ## Call appropriate parameter and model extractor
-        pass
+        model = torch.load(os.path.join(args.ckptfldr, 'ae_baseline.pt'))
+        weight_matrix = model.encoder.weight.cpu().detach().numpy()
+
     elif args.model=='cl':
         ## Load Model
         model = torch.load(os.path.join(args.ckptfldr, 'cl_baseline.pth'))
