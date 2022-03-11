@@ -12,3 +12,7 @@ def classification_score(y_true, y_pred, mode='f1'):
         return metrics.f1_score(y_true, y_pred, average='macro')
     elif mode=='acc':
         return metrics.accuracy_score(y_true, y_pred)
+
+def regression_score(y_true, y_pred, mode='rmse'):
+    if mode=='rmse':
+        return metrics.mean_squared_error(y_true, y_pred, squared=False)

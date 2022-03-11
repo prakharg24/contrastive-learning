@@ -7,8 +7,8 @@ import torch
 from contrastive_learning import contrastive_training
 from autoencoder import auto_encoder
 from data_generator import SpikedCovarianceDataset
-from test_utils import sinedistance_eigenvectors, classification_score
-from downstream import svm_classifier
+from test_utils import sinedistance_eigenvectors, classification_score, regression_score
+from downstream import svm_classifier, linear_regressor
 
 downstream_task_name = {'cls': 'Classification', 'reg': 'Regression'}
 
@@ -47,7 +47,7 @@ random.seed(int(args.seed))
 torch.manual_seed(int(args.seed))
 
 ## Call data generator
-generator = SpikedCovarianceDataset(args.r, args.d, args.sigma, label_mode='classification')
+generator = SpikedCovarianceDataset(args.r, args.d, args.sigma, label_mode=args.dwn_mode)
 X_train, y_train = generator.get_next_batch(batch_size=args.train_size)
 X_test, y_test = generator.get_next_batch(batch_size=args.test_size)
 
@@ -85,8 +85,18 @@ elif args.mode=='test':
     if args.dwn_mode=='cls':
         if args.dwn_model=='svm':
             predicted_labels = svm_classifier(representations_train, y_train, representations_test)
+        else:
+            raise Exception("Classification Model specified is not Implemented")
 
         final_score = classification_score(y_test, predicted_labels, mode='acc')
+
+    elif args.dwn_mode=='reg':
+        if args.dwn_model=='linear':
+            predicted_labels = linear_regressor(representations_train, y_train, representations_test)
+        else:
+            raise Exception("Regression Model specified is not Implemented")
+
+        final_score = regression_score(y_test, predicted_labels, mode='rmse')
 
     print("%s Task Score : %f" % (downstream_task_name[args.dwn_mode], final_score))
 
