@@ -23,6 +23,7 @@ def downstream_score(dwn_mode, dwn_model,
                      representations_train, y_train,
                      representations_test, y_test):
     if dwn_mode=='cls':
+        dwn_model = str(dwn_model)
         if dwn_model=='svm':
             predicted_labels = svm_classifier(representations_train, y_train, representations_test)
         else:

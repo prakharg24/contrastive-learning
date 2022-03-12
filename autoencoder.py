@@ -71,7 +71,7 @@ def auto_encoder(d, r, X, batch_size, num_epochs, lr, single_layer, requires_rel
     train_dataloader = DataLoader(X, batch_size=batch_size, shuffle=True, num_workers=4, drop_last=True)
     # Model
     model = AutoEncoder(d, r, single_layer, requires_relu)
-    print(model)
+    # print(model)
     optimizer = optim.Adam(model.parameters(), lr)
     criterion = nn.MSELoss()
     model.to(device)

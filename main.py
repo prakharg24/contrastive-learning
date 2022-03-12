@@ -21,7 +21,7 @@ parser.add_argument("--seed", default=0, help="Random seed to allow replication 
 ## Parameters for Data Generation
 parser.add_argument("--r", type=int, default=10, help="Representation Dimension of Original Signal")
 parser.add_argument("--d", type=int, default=40, help="Representation Dimension of Generated Input")
-parser.add_argument("--sigma", type=float, default=100., help="Standard Deviation of original signal")
+parser.add_argument("--sigma", type=float, default=1., help="Standard Deviation of original signal")
 
 ## Parameters for Training
 ## Add more and change as required
@@ -92,7 +92,6 @@ elif args.mode=='test':
                      representations_test, y_test)
 
 elif args.mode=='gold':
-
     downstream_score(args.dwn_mode, args.dwn_model,
                      r_train, y_train,
                      r_test, y_test)

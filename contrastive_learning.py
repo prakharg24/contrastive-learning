@@ -137,11 +137,11 @@ class linear_CL_Model(torch.nn.Module):
 def contrastive_training(r, d, x, loss_fn, batch_size, num_epochs, lr, lam, cuda=True):
     # Data Loader
     x = torch.tensor(x)
-    print(f"Train Data Shape: {x.size()}")
+    # print(f"Train Data Shape: {x.size()}")
     train_loader = DataLoader(DataHandler(x), shuffle=True, batch_size=batch_size, drop_last=True)
     # Model
     model = linear_CL_Model(d, r).double().cuda()
-    print(f"Model Size: {model.linear.weight.size()}")
+    # print(f"Model Size: {model.linear.weight.size()}")
     # Optimizer
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     if loss_fn == "NTXENT":
