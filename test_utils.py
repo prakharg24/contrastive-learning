@@ -40,7 +40,7 @@ def downstream_score(dwn_mode, dwn_model,
         final_score = regression_score(y_test, predicted_labels, mode='rmse')
 
     print("%s Task Score : %f" % (downstream_task_name[dwn_mode], final_score))
-
+    return final_score
 
 ## Downstream Models
 def svm_classifier(X_train, y_train, X_test):

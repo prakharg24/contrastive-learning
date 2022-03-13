@@ -8,6 +8,7 @@ import torch.nn as nn
 from sklearn.manifold import TSNE
 from matplotlib import pyplot as plt
 from tqdm import tqdm
+from test_utils import sinedistance_eigenvectors
 
 
 class NT_Xent(nn.Module):
@@ -59,8 +60,6 @@ def triplet_contrastive_loss(x, B_pos, B_neg):
     return loss
 
 
-
-
 class SelfconLoss(nn.Module):
     def __init__(self, lam):
         super(SelfconLoss, self).__init__()
@@ -88,17 +87,23 @@ class SelfconLoss(nn.Module):
 
 class DataHandler(Dataset):
     def generate_random_mask(self, size):
-        random_mask = np.diag(np.rint(np.random.rand(size)))
+        mask_percentage = 0.1
+        random_mask = np.random.rand(size)
+        random_mask[random_mask > mask_percentage] = 1
+        random_mask[random_mask <= mask_percentage] = 0
+        random_mask = np.diag(random_mask)
         return torch.tensor(random_mask)
 
     def __init__(self, X):
         self.X = X
-        self.random_mask = self.generate_random_mask(X.size()[1])
+        self.mask_size = X.size()[1]
+        self.random_mask_1 = self.generate_random_mask(self.mask_size)
+        self.random_mask_2 = self.generate_random_mask(self.mask_size)
 
     def __getitem__(self, index):
         x = self.X[index]
-        x1 = torch.matmul(self.random_mask, x)
-        x2 = torch.matmul((1 - self.random_mask), x)
+        x1 = torch.matmul(self.generate_random_mask(self.mask_size), x)
+        x2 = torch.matmul(self.generate_random_mask(self.mask_size), x)
         return x1, x2
 
     def __len__(self):
@@ -134,7 +139,7 @@ class linear_CL_Model(torch.nn.Module):
         out = self.linear(x)
         return out
 
-def contrastive_training(r, d, x, loss_fn, batch_size, num_epochs, lr, lam, cuda=True):
+def contrastive_training(r, d, x, ustar, loss_fn, batch_size, num_epochs, lr, lam, patience, cuda=True):
     # Data Loader
     x = torch.tensor(x)
     # print(f"Train Data Shape: {x.size()}")
@@ -149,9 +154,21 @@ def contrastive_training(r, d, x, loss_fn, batch_size, num_epochs, lr, lam, cuda
     else:
         criterion = SelfconLoss(lam)
 
-    epoch_iterator = tqdm(range(num_epochs), desc='Epochs', position=0)
-    loss_log = tqdm(total=0, position=1, bar_format='{desc}')
+    epoch_iterator = tqdm(range(num_epochs), desc='Epochs')
+    # loss_log = tqdm(total=0, position=1, bar_format='{desc}')
+    patience_steps = 0
+    min_loss = float("inf")
+    best_model = model.state_dict()
     for epoch in epoch_iterator:
         loss_epoch = train(train_loader, model, criterion, optimizer, loss_fn)
-        loss_log.set_description_str(f"Epoch [{epoch+1}/{num_epochs}] Loss: {loss_epoch / len(train_loader)}")
+        if loss_epoch < min_loss:
+            min_loss = loss_epoch
+            patience_steps = 0
+            best_model = model.state_dict()
+        else:
+            patience_steps += 1
+        if patience_steps > patience:
+            model.load_state_dict(best_model)
+            break
+        epoch_iterator.set_description(f"Epoch [{epoch+1}/{num_epochs}] Loss: {loss_epoch / len(train_loader)}")
     return model

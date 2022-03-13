@@ -1,11 +1,12 @@
 import numpy as np
 
 class SpikedCovarianceDataset():
-    def __init__(self, r, d, sigma, label_mode='cls'):
+    def __init__(self, r, d, sigma, noise_sigma, label_mode='cls'):
         ## Setting hyperparameters for data generation
         self.r = r
         self.d = d
         self.sigma = sigma
+        self.noise_sigma = noise_sigma
 
         ## Creating orthonormal matrix U* through SVD
         u, s, vh = np.linalg.svd(np.random.rand(d, r), full_matrices=False)
@@ -24,7 +25,7 @@ class SpikedCovarianceDataset():
         signal = signal.reshape(self.r, batch_size)
 
         ## Noise Sigma E
-        noise = np.random.normal(0., self.sigma/10., self.d*batch_size)
+        noise = np.random.normal(0., self.noise_sigma, self.d*batch_size)
         noise = noise.reshape(self.d, batch_size)
 
         ## Input features are U*z + E

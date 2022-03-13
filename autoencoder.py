@@ -63,12 +63,15 @@ def sequential_linear_block(in_layers, out_layers, requires_relu=False):
         return nn.Linear(in_layers, out_layers, bias=False)
 
 
-def auto_encoder(d, r, X, batch_size, num_epochs, lr, single_layer, requires_relu, cuda=True):
+def regularization_loss(weight, lam):
+    return lam / 2 * torch.linalg.matrix_norm(torch.square(torch.matmul(weight, weight.T)), ord='fro')
+
+def auto_encoder(d, r, X, batch_size, num_epochs, lr, single_layer, requires_relu, lam, patience, cuda=True):
     X = torch.Tensor(X)
     device = 'cuda' if cuda else 'cpu'
 
     # Load training data
-    train_dataloader = DataLoader(X, batch_size=batch_size, shuffle=True, num_workers=4, drop_last=True)
+    train_dataloader = DataLoader(X, batch_size=batch_size, shuffle=True, drop_last=True)
     # Model
     model = AutoEncoder(d, r, single_layer, requires_relu)
     # print(model)
@@ -77,14 +80,28 @@ def auto_encoder(d, r, X, batch_size, num_epochs, lr, single_layer, requires_rel
     model.to(device)
 
     loss_log = tqdm(total=0, position=1, bar_format='{desc}')
+    patience_steps = 0
+    min_loss = float("inf")
+    best_model = model.state_dict()
     for epoch in tqdm(range(num_epochs)):
+        loss_epoch = 0
         for batch_id, batch_data in enumerate(train_dataloader):
             optimizer.zero_grad()
             batch_data = batch_data.to(device)
             prediction = model(batch_data)
             loss = criterion(prediction, batch_data)
+            loss += regularization_loss(model.encoder.weight, lam)
             loss.backward()
             optimizer.step()
             loss_log.set_description_str(f"Epoch [{epoch+1}/{num_epochs}] Loss: {loss / len(train_dataloader)}")
-
+            loss_epoch += loss.item()
+        if loss_epoch < min_loss:
+            min_loss = loss_epoch
+            patience_steps = 0
+            best_model = model.state_dict()
+        else:
+            patience_steps += 1
+        if patience_steps > patience:
+            model.load_state_dict(best_model)
+            break
     return model
