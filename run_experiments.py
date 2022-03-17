@@ -37,7 +37,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     sinedistance_scores = {}
     downstream_scores = {}
-    for model in ["ae", "cl"]:
+    for model in ["cl"]:
         sinedistance_scores[model] = [model]
         downstream_scores[model] = [model]
         if args.experiment == "increase_noise":

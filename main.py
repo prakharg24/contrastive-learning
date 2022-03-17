@@ -104,5 +104,6 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    sinedistance_score, score = run(args)
-    print(sinedistance_score, score)
+    run(args)
+    # sinedistance_score, score = run(args)
+    # print(sinedistance_score, score)

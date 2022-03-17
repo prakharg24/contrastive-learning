@@ -109,12 +109,12 @@ class DataHandler(Dataset):
     def __len__(self):
         return len(self.X)
 
-def train(train_loader, model, criterion, optimizer, loss_fn):
+def train(train_loader, model, criterion, optimizer, loss_fn, device):
     loss_epoch = 0
     for step, (x_i, x_j) in enumerate(train_loader):
         optimizer.zero_grad()
-        x_i = x_i.cuda(non_blocking=True)
-        x_j = x_j.cuda(non_blocking=True)
+        x_i = x_i.to(device, non_blocking=True)
+        x_j = x_j.to(device, non_blocking=True)
 
         # positive pair, with encoding
         z_i = model(x_i)
@@ -142,10 +142,11 @@ class linear_CL_Model(torch.nn.Module):
 def contrastive_training(r, d, x, ustar, loss_fn, batch_size, num_epochs, lr, lam, patience, cuda=True):
     # Data Loader
     x = torch.tensor(x)
+    device = 'cuda' if cuda else 'cpu'
     # print(f"Train Data Shape: {x.size()}")
     train_loader = DataLoader(DataHandler(x), shuffle=True, batch_size=batch_size, drop_last=True)
     # Model
-    model = linear_CL_Model(d, r).double().cuda()
+    model = linear_CL_Model(d, r).double().to(device)
     # print(f"Model Size: {model.linear.weight.size()}")
     # Optimizer
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
@@ -160,7 +161,7 @@ def contrastive_training(r, d, x, ustar, loss_fn, batch_size, num_epochs, lr, la
     min_loss = float("inf")
     best_model = model.state_dict()
     for epoch in epoch_iterator:
-        loss_epoch = train(train_loader, model, criterion, optimizer, loss_fn)
+        loss_epoch = train(train_loader, model, criterion, optimizer, loss_fn, device)
         if loss_epoch < min_loss:
             min_loss = loss_epoch
             patience_steps = 0

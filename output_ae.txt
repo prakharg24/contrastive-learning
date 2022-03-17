@@ -1,0 +1,1050 @@
+0, 10, 20000
+Sine Distance to U* : 0.000000
+Classification Task Score : 0.620000
+Sine Distance to U* : 0.000000
+Regression Task Score : 0.473598
+0, 20, 20000
+Sine Distance to U* : 0.047828
+Classification Task Score : 0.657000
+Sine Distance to U* : 0.047828
+Regression Task Score : 0.438566
+0, 30, 20000
+Sine Distance to U* : 0.060549
+Classification Task Score : 0.658000
+Sine Distance to U* : 0.060549
+Regression Task Score : 0.463872
+0, 40, 20000
+Sine Distance to U* : 0.073050
+Classification Task Score : 0.635000
+Sine Distance to U* : 0.073050
+Regression Task Score : 0.456662
+0, 50, 20000
+Sine Distance to U* : 0.084588
+Classification Task Score : 0.664000
+Sine Distance to U* : 0.084588
+Regression Task Score : 0.453430
+0, 60, 20000
+Sine Distance to U* : 0.095705
+Classification Task Score : 0.667000
+Sine Distance to U* : 0.095705
+Regression Task Score : 0.449510
+0, 70, 20000
+Sine Distance to U* : 0.101369
+Classification Task Score : 0.641000
+Sine Distance to U* : 0.101369
+Regression Task Score : 0.461812
+0, 80, 20000
+Sine Distance to U* : 0.111221
+Classification Task Score : 0.643000
+Sine Distance to U* : 0.111221
+Regression Task Score : 0.456329
+0, 90, 20000
+Sine Distance to U* : 0.116378
+Classification Task Score : 0.654000
+Sine Distance to U* : 0.116378
+Regression Task Score : 0.455911
+0, 100, 20000
+Sine Distance to U* : 0.123512
+Classification Task Score : 0.647000
+Sine Distance to U* : 0.123512
+Regression Task Score : 0.460770
+0, 110, 20000
+Sine Distance to U* : 0.131713
+Classification Task Score : 0.631000
+Sine Distance to U* : 0.131713
+Regression Task Score : 0.480967
+0, 40, 1000
+Sine Distance to U* : 2.109504
+Classification Task Score : 0.619000
+Sine Distance to U* : 2.109504
+Regression Task Score : 0.600765
+0, 40, 2000
+Sine Distance to U* : 1.359171
+Classification Task Score : 0.630000
+Sine Distance to U* : 1.359171
+Regression Task Score : 0.482353
+0, 40, 3000
+Sine Distance to U* : 0.778250
+Classification Task Score : 0.634000
+Sine Distance to U* : 0.778250
+Regression Task Score : 0.466308
+0, 40, 4000
+Sine Distance to U* : 0.358847
+Classification Task Score : 0.633000
+Sine Distance to U* : 0.358847
+Regression Task Score : 0.458681
+0, 40, 5000
+Sine Distance to U* : 0.206938
+Classification Task Score : 0.628000
+Sine Distance to U* : 0.206938
+Regression Task Score : 0.456728
+0, 40, 10000
+Sine Distance to U* : 0.099872
+Classification Task Score : 0.636000
+Sine Distance to U* : 0.099872
+Regression Task Score : 0.456952
+0, 40, 20000
+Sine Distance to U* : 0.073050
+Classification Task Score : 0.635000
+Sine Distance to U* : 0.073050
+Regression Task Score : 0.456662
+0, 40, 30000
+Sine Distance to U* : 0.056636
+Classification Task Score : 0.637000
+Sine Distance to U* : 0.056636
+Regression Task Score : 0.456749
+0, 40, 40000
+Sine Distance to U* : 0.051100
+Classification Task Score : 0.635000
+Sine Distance to U* : 0.051100
+Regression Task Score : 0.456659
+0, 40, 50000
+Sine Distance to U* : 0.047110
+Classification Task Score : 0.634000
+Sine Distance to U* : 0.047110
+Regression Task Score : 0.456329
+10, 10, 20000
+Sine Distance to U* : 0.000000
+Classification Task Score : 0.649000
+Sine Distance to U* : 0.000000
+Regression Task Score : 0.463446
+10, 20, 20000
+Sine Distance to U* : 0.045320
+Classification Task Score : 0.652000
+Sine Distance to U* : 0.045320
+Regression Task Score : 0.462294
+10, 30, 20000
+Sine Distance to U* : 0.056154
+Classification Task Score : 0.638000
+Sine Distance to U* : 0.056154
+Regression Task Score : 0.472105
+10, 40, 20000
+Sine Distance to U* : 0.069578
+Classification Task Score : 0.643000
+Sine Distance to U* : 0.069578
+Regression Task Score : 0.452562
+10, 50, 20000
+Sine Distance to U* : 0.084544
+Classification Task Score : 0.650000
+Sine Distance to U* : 0.084544
+Regression Task Score : 0.460531
+10, 60, 20000
+Sine Distance to U* : 0.092719
+Classification Task Score : 0.664000
+Sine Distance to U* : 0.092719
+Regression Task Score : 0.460522
+10, 70, 20000
+Sine Distance to U* : 0.099337
+Classification Task Score : 0.664000
+Sine Distance to U* : 0.099337
+Regression Task Score : 0.468197
+10, 80, 20000
+Sine Distance to U* : 0.106479
+Classification Task Score : 0.642000
+Sine Distance to U* : 0.106479
+Regression Task Score : 0.450484
+10, 90, 20000
+Sine Distance to U* : 0.116929
+Classification Task Score : 0.657000
+Sine Distance to U* : 0.116929
+Regression Task Score : 0.440343
+10, 100, 20000
+Sine Distance to U* : 0.123623
+Classification Task Score : 0.652000
+Sine Distance to U* : 0.123623
+Regression Task Score : 0.448939
+10, 110, 20000
+Sine Distance to U* : 0.126356
+Classification Task Score : 0.643000
+Sine Distance to U* : 0.126356
+Regression Task Score : 0.468255
+10, 40, 1000
+Sine Distance to U* : 2.125645
+Classification Task Score : 0.618000
+Sine Distance to U* : 2.125645
+Regression Task Score : 0.540816
+10, 40, 2000
+Sine Distance to U* : 1.356781
+Classification Task Score : 0.642000
+Sine Distance to U* : 1.356781
+Regression Task Score : 0.465864
+10, 40, 3000
+Sine Distance to U* : 1.031277
+Classification Task Score : 0.643000
+Sine Distance to U* : 1.031277
+Regression Task Score : 0.458170
+10, 40, 4000
+Sine Distance to U* : 0.586533
+Classification Task Score : 0.636000
+Sine Distance to U* : 0.586533
+Regression Task Score : 0.453332
+10, 40, 5000
+Sine Distance to U* : 0.689958
+Classification Task Score : 0.647000
+Sine Distance to U* : 0.689958
+Regression Task Score : 0.453219
+10, 40, 10000
+Sine Distance to U* : 0.102348
+Classification Task Score : 0.641000
+Sine Distance to U* : 0.102348
+Regression Task Score : 0.453040
+10, 40, 20000
+Sine Distance to U* : 0.069578
+Classification Task Score : 0.643000
+Sine Distance to U* : 0.069578
+Regression Task Score : 0.452562
+10, 40, 30000
+Sine Distance to U* : 0.056509
+Classification Task Score : 0.641000
+Sine Distance to U* : 0.056509
+Regression Task Score : 0.452912
+10, 40, 40000
+Sine Distance to U* : 0.051482
+Classification Task Score : 0.646000
+Sine Distance to U* : 0.051482
+Regression Task Score : 0.452941
+10, 40, 50000
+Sine Distance to U* : 0.048778
+Classification Task Score : 0.644000
+Sine Distance to U* : 0.048778
+Regression Task Score : 0.452981
+20, 10, 20000
+Sine Distance to U* : 0.000000
+Classification Task Score : 0.639000
+Sine Distance to U* : 0.000000
+Regression Task Score : 0.466305
+20, 20, 20000
+Sine Distance to U* : 0.040049
+Classification Task Score : 0.646000
+Sine Distance to U* : 0.040049
+Regression Task Score : 0.456710
+20, 30, 20000
+Sine Distance to U* : 0.057318
+Classification Task Score : 0.622000
+Sine Distance to U* : 0.057318
+Regression Task Score : 0.446988
+20, 40, 20000
+Sine Distance to U* : 0.072141
+Classification Task Score : 0.624000
+Sine Distance to U* : 0.072141
+Regression Task Score : 0.452916
+20, 50, 20000
+Sine Distance to U* : 0.083428
+Classification Task Score : 0.663000
+Sine Distance to U* : 0.083428
+Regression Task Score : 0.462596
+20, 60, 20000
+Sine Distance to U* : 0.090297
+Classification Task Score : 0.635000
+Sine Distance to U* : 0.090297
+Regression Task Score : 0.446456
+20, 70, 20000
+Sine Distance to U* : 0.096803
+Classification Task Score : 0.654000
+Sine Distance to U* : 0.096803
+Regression Task Score : 0.449245
+20, 80, 20000
+Sine Distance to U* : 0.106072
+Classification Task Score : 0.646000
+Sine Distance to U* : 0.106072
+Regression Task Score : 0.464334
+20, 90, 20000
+Sine Distance to U* : 0.116874
+Classification Task Score : 0.648000
+Sine Distance to U* : 0.116874
+Regression Task Score : 0.464391
+20, 100, 20000
+Sine Distance to U* : 0.123754
+Classification Task Score : 0.671000
+Sine Distance to U* : 0.123754
+Regression Task Score : 0.450423
+20, 110, 20000
+Sine Distance to U* : 0.131286
+Classification Task Score : 0.650000
+Sine Distance to U* : 0.131286
+Regression Task Score : 0.467231
+20, 40, 1000
+Sine Distance to U* : 2.173975
+Classification Task Score : 0.608000
+Sine Distance to U* : 2.173975
+Regression Task Score : 0.679939
+20, 40, 2000
+Sine Distance to U* : 1.395977
+Classification Task Score : 0.619000
+Sine Distance to U* : 1.395977
+Regression Task Score : 0.553164
+20, 40, 3000
+Sine Distance to U* : 0.846404
+Classification Task Score : 0.623000
+Sine Distance to U* : 0.846404
+Regression Task Score : 0.479098
+20, 40, 4000
+Sine Distance to U* : 0.554355
+Classification Task Score : 0.629000
+Sine Distance to U* : 0.554355
+Regression Task Score : 0.459433
+20, 40, 5000
+Sine Distance to U* : 0.242779
+Classification Task Score : 0.622000
+Sine Distance to U* : 0.242779
+Regression Task Score : 0.454526
+20, 40, 10000
+Sine Distance to U* : 0.091733
+Classification Task Score : 0.625000
+Sine Distance to U* : 0.091733
+Regression Task Score : 0.453179
+20, 40, 20000
+Sine Distance to U* : 0.072141
+Classification Task Score : 0.624000
+Sine Distance to U* : 0.072141
+Regression Task Score : 0.452916
+20, 40, 30000
+Sine Distance to U* : 0.061851
+Classification Task Score : 0.623000
+Sine Distance to U* : 0.061851
+Regression Task Score : 0.452872
+20, 40, 40000
+Sine Distance to U* : 0.051224
+Classification Task Score : 0.625000
+Sine Distance to U* : 0.051224
+Regression Task Score : 0.452743
+20, 40, 50000
+Sine Distance to U* : 0.049943
+Classification Task Score : 0.622000
+Sine Distance to U* : 0.049943
+Regression Task Score : 0.452702
+30, 10, 20000
+Sine Distance to U* : 0.000000
+Classification Task Score : 0.650000
+Sine Distance to U* : 0.000000
+Regression Task Score : 0.456170
+30, 20, 20000
+Sine Distance to U* : 0.037485
+Classification Task Score : 0.650000
+Sine Distance to U* : 0.037485
+Regression Task Score : 0.444179
+30, 30, 20000
+Sine Distance to U* : 0.054702
+Classification Task Score : 0.658000
+Sine Distance to U* : 0.054702
+Regression Task Score : 0.453671
+30, 40, 20000
+Sine Distance to U* : 0.066209
+Classification Task Score : 0.657000
+Sine Distance to U* : 0.066209
+Regression Task Score : 0.470190
+30, 50, 20000
+Sine Distance to U* : 0.078178
+Classification Task Score : 0.623000
+Sine Distance to U* : 0.078178
+Regression Task Score : 0.451769
+30, 60, 20000
+Sine Distance to U* : 0.086042
+Classification Task Score : 0.656000
+Sine Distance to U* : 0.086042
+Regression Task Score : 0.464839
+30, 70, 20000
+Sine Distance to U* : 0.099157
+Classification Task Score : 0.658000
+Sine Distance to U* : 0.099157
+Regression Task Score : 0.460895
+30, 80, 20000
+Sine Distance to U* : 0.110776
+Classification Task Score : 0.633000
+Sine Distance to U* : 0.110776
+Regression Task Score : 0.453524
+30, 90, 20000
+Sine Distance to U* : 0.119416
+Classification Task Score : 0.651000
+Sine Distance to U* : 0.119416
+Regression Task Score : 0.466920
+30, 100, 20000
+Sine Distance to U* : 0.125961
+Classification Task Score : 0.662000
+Sine Distance to U* : 0.125961
+Regression Task Score : 0.458927
+30, 110, 20000
+Sine Distance to U* : 0.129995
+Classification Task Score : 0.668000
+Sine Distance to U* : 0.129995
+Regression Task Score : 0.454169
+30, 40, 1000
+Sine Distance to U* : 2.000651
+Classification Task Score : 0.653000
+Sine Distance to U* : 2.000651
+Regression Task Score : 0.555347
+30, 40, 2000
+Sine Distance to U* : 1.304501
+Classification Task Score : 0.659000
+Sine Distance to U* : 1.304501
+Regression Task Score : 0.480260
+30, 40, 3000
+Sine Distance to U* : 0.916951
+Classification Task Score : 0.661000
+Sine Distance to U* : 0.916951
+Regression Task Score : 0.472086
+30, 40, 4000
+Sine Distance to U* : 0.506429
+Classification Task Score : 0.663000
+Sine Distance to U* : 0.506429
+Regression Task Score : 0.471957
+30, 40, 5000
+Sine Distance to U* : 0.296087
+Classification Task Score : 0.662000
+Sine Distance to U* : 0.296087
+Regression Task Score : 0.470379
+30, 40, 10000
+Sine Distance to U* : 0.096247
+Classification Task Score : 0.659000
+Sine Distance to U* : 0.096247
+Regression Task Score : 0.470175
+30, 40, 20000
+Sine Distance to U* : 0.066209
+Classification Task Score : 0.657000
+Sine Distance to U* : 0.066209
+Regression Task Score : 0.470190
+30, 40, 30000
+Sine Distance to U* : 0.057513
+Classification Task Score : 0.656000
+Sine Distance to U* : 0.057513
+Regression Task Score : 0.470009
+30, 40, 40000
+Sine Distance to U* : 0.048408
+Classification Task Score : 0.658000
+Sine Distance to U* : 0.048408
+Regression Task Score : 0.470296
+30, 40, 50000
+Sine Distance to U* : 0.046345
+Classification Task Score : 0.657000
+Sine Distance to U* : 0.046345
+Regression Task Score : 0.469735
+40, 10, 20000
+Sine Distance to U* : 0.000000
+Classification Task Score : 0.657000
+Sine Distance to U* : 0.000000
+Regression Task Score : 0.442723
+40, 20, 20000
+Sine Distance to U* : 0.038586
+Classification Task Score : 0.629000
+Sine Distance to U* : 0.038586
+Regression Task Score : 0.459941
+40, 30, 20000
+Sine Distance to U* : 0.059382
+Classification Task Score : 0.661000
+Sine Distance to U* : 0.059382
+Regression Task Score : 0.460099
+40, 40, 20000
+Sine Distance to U* : 0.072722
+Classification Task Score : 0.640000
+Sine Distance to U* : 0.072722
+Regression Task Score : 0.449363
+40, 50, 20000
+Sine Distance to U* : 0.081150
+Classification Task Score : 0.639000
+Sine Distance to U* : 0.081150
+Regression Task Score : 0.467658
+40, 60, 20000
+Sine Distance to U* : 0.090578
+Classification Task Score : 0.654000
+Sine Distance to U* : 0.090578
+Regression Task Score : 0.465904
+40, 70, 20000
+Sine Distance to U* : 0.099752
+Classification Task Score : 0.621000
+Sine Distance to U* : 0.099752
+Regression Task Score : 0.463680
+40, 80, 20000
+Sine Distance to U* : 0.109498
+Classification Task Score : 0.657000
+Sine Distance to U* : 0.109498
+Regression Task Score : 0.449150
+40, 90, 20000
+Sine Distance to U* : 0.118194
+Classification Task Score : 0.649000
+Sine Distance to U* : 0.118194
+Regression Task Score : 0.463379
+40, 100, 20000
+Sine Distance to U* : 0.121873
+Classification Task Score : 0.650000
+Sine Distance to U* : 0.121873
+Regression Task Score : 0.455530
+40, 110, 20000
+Sine Distance to U* : 0.132151
+Classification Task Score : 0.637000
+Sine Distance to U* : 0.132151
+Regression Task Score : 0.443355
+40, 40, 1000
+Sine Distance to U* : 2.124472
+Classification Task Score : 0.595000
+Sine Distance to U* : 2.124472
+Regression Task Score : 0.758877
+40, 40, 2000
+Sine Distance to U* : 1.451453
+Classification Task Score : 0.594000
+Sine Distance to U* : 1.451453
+Regression Task Score : 0.759147
+40, 40, 3000
+Sine Distance to U* : 0.838738
+Classification Task Score : 0.638000
+Sine Distance to U* : 0.838738
+Regression Task Score : 0.495705
+40, 40, 4000
+Sine Distance to U* : 0.568760
+Classification Task Score : 0.637000
+Sine Distance to U* : 0.568760
+Regression Task Score : 0.466943
+40, 40, 5000
+Sine Distance to U* : 1.005669
+Classification Task Score : 0.605000
+Sine Distance to U* : 1.005669
+Regression Task Score : 0.712707
+40, 40, 10000
+Sine Distance to U* : 0.099964
+Classification Task Score : 0.640000
+Sine Distance to U* : 0.099964
+Regression Task Score : 0.449594
+40, 40, 20000
+Sine Distance to U* : 0.072722
+Classification Task Score : 0.640000
+Sine Distance to U* : 0.072722
+Regression Task Score : 0.449363
+40, 40, 30000
+Sine Distance to U* : 0.058946
+Classification Task Score : 0.640000
+Sine Distance to U* : 0.058946
+Regression Task Score : 0.449178
+40, 40, 40000
+Sine Distance to U* : 0.048691
+Classification Task Score : 0.639000
+Sine Distance to U* : 0.048691
+Regression Task Score : 0.449379
+40, 40, 50000
+Sine Distance to U* : 0.045716
+Classification Task Score : 0.640000
+Sine Distance to U* : 0.045716
+Regression Task Score : 0.449431
+50, 10, 20000
+Sine Distance to U* : 0.000000
+Classification Task Score : 0.623000
+Sine Distance to U* : 0.000000
+Regression Task Score : 0.462305
+50, 20, 20000
+Sine Distance to U* : 0.037556
+Classification Task Score : 0.653000
+Sine Distance to U* : 0.037556
+Regression Task Score : 0.451220
+50, 30, 20000
+Sine Distance to U* : 0.053522
+Classification Task Score : 0.662000
+Sine Distance to U* : 0.053522
+Regression Task Score : 0.449196
+50, 40, 20000
+Sine Distance to U* : 0.066474
+Classification Task Score : 0.647000
+Sine Distance to U* : 0.066474
+Regression Task Score : 0.441759
+50, 50, 20000
+Sine Distance to U* : 0.077643
+Classification Task Score : 0.635000
+Sine Distance to U* : 0.077643
+Regression Task Score : 0.456967
+50, 60, 20000
+Sine Distance to U* : 0.090246
+Classification Task Score : 0.654000
+Sine Distance to U* : 0.090246
+Regression Task Score : 0.455268
+50, 70, 20000
+Sine Distance to U* : 0.101374
+Classification Task Score : 0.641000
+Sine Distance to U* : 0.101374
+Regression Task Score : 0.442975
+50, 80, 20000
+Sine Distance to U* : 0.106616
+Classification Task Score : 0.651000
+Sine Distance to U* : 0.106616
+Regression Task Score : 0.448102
+50, 90, 20000
+Sine Distance to U* : 0.115772
+Classification Task Score : 0.630000
+Sine Distance to U* : 0.115772
+Regression Task Score : 0.438854
+50, 100, 20000
+Sine Distance to U* : 0.126486
+Classification Task Score : 0.640000
+Sine Distance to U* : 0.126486
+Regression Task Score : 0.447046
+50, 110, 20000
+Sine Distance to U* : 0.131988
+Classification Task Score : 0.608000
+Sine Distance to U* : 0.131988
+Regression Task Score : 0.467006
+50, 40, 1000
+Sine Distance to U* : 2.227378
+Classification Task Score : 0.616000
+Sine Distance to U* : 2.227378
+Regression Task Score : 0.714348
+50, 40, 2000
+Sine Distance to U* : 1.479453
+Classification Task Score : 0.648000
+Sine Distance to U* : 1.479453
+Regression Task Score : 0.525602
+50, 40, 3000
+Sine Distance to U* : 1.003591
+Classification Task Score : 0.642000
+Sine Distance to U* : 1.003591
+Regression Task Score : 0.489629
+50, 40, 4000
+Sine Distance to U* : 0.543942
+Classification Task Score : 0.641000
+Sine Distance to U* : 0.543942
+Regression Task Score : 0.451021
+50, 40, 5000
+Sine Distance to U* : 0.217862
+Classification Task Score : 0.651000
+Sine Distance to U* : 0.217862
+Regression Task Score : 0.442260
+50, 40, 10000
+Sine Distance to U* : 0.098941
+Classification Task Score : 0.648000
+Sine Distance to U* : 0.098941
+Regression Task Score : 0.441651
+50, 40, 20000
+Sine Distance to U* : 0.066474
+Classification Task Score : 0.647000
+Sine Distance to U* : 0.066474
+Regression Task Score : 0.441759
+50, 40, 30000
+Sine Distance to U* : 0.058317
+Classification Task Score : 0.646000
+Sine Distance to U* : 0.058317
+Regression Task Score : 0.441466
+50, 40, 40000
+Sine Distance to U* : 0.052954
+Classification Task Score : 0.647000
+Sine Distance to U* : 0.052954
+Regression Task Score : 0.441271
+50, 40, 50000
+Sine Distance to U* : 0.047620
+Classification Task Score : 0.644000
+Sine Distance to U* : 0.047620
+Regression Task Score : 0.441253
+60, 10, 20000
+Sine Distance to U* : 0.000000
+Classification Task Score : 0.658000
+Sine Distance to U* : 0.000000
+Regression Task Score : 0.456630
+60, 20, 20000
+Sine Distance to U* : 0.043343
+Classification Task Score : 0.666000
+Sine Distance to U* : 0.043343
+Regression Task Score : 0.481762
+60, 30, 20000
+Sine Distance to U* : 0.058283
+Classification Task Score : 0.647000
+Sine Distance to U* : 0.058283
+Regression Task Score : 0.447616
+60, 40, 20000
+Sine Distance to U* : 0.069639
+Classification Task Score : 0.640000
+Sine Distance to U* : 0.069639
+Regression Task Score : 0.455885
+60, 50, 20000
+Sine Distance to U* : 0.079557
+Classification Task Score : 0.649000
+Sine Distance to U* : 0.079557
+Regression Task Score : 0.459467
+60, 60, 20000
+Sine Distance to U* : 0.088303
+Classification Task Score : 0.639000
+Sine Distance to U* : 0.088303
+Regression Task Score : 0.474430
+60, 70, 20000
+Sine Distance to U* : 0.103628
+Classification Task Score : 0.657000
+Sine Distance to U* : 0.103628
+Regression Task Score : 0.450754
+60, 80, 20000
+Sine Distance to U* : 0.109314
+Classification Task Score : 0.625000
+Sine Distance to U* : 0.109314
+Regression Task Score : 0.459640
+60, 90, 20000
+Sine Distance to U* : 0.115148
+Classification Task Score : 0.657000
+Sine Distance to U* : 0.115148
+Regression Task Score : 0.448108
+60, 100, 20000
+Sine Distance to U* : 0.124754
+Classification Task Score : 0.649000
+Sine Distance to U* : 0.124754
+Regression Task Score : 0.459344
+60, 110, 20000
+Sine Distance to U* : 0.132778
+Classification Task Score : 0.631000
+Sine Distance to U* : 0.132778
+Regression Task Score : 0.443838
+60, 40, 1000
+Sine Distance to U* : 2.043608
+Classification Task Score : 0.628000
+Sine Distance to U* : 2.043608
+Regression Task Score : 0.542075
+60, 40, 2000
+Sine Distance to U* : 1.310225
+Classification Task Score : 0.637000
+Sine Distance to U* : 1.310225
+Regression Task Score : 0.473540
+60, 40, 3000
+Sine Distance to U* : 0.913338
+Classification Task Score : 0.639000
+Sine Distance to U* : 0.913338
+Regression Task Score : 0.459256
+60, 40, 4000
+Sine Distance to U* : 0.449062
+Classification Task Score : 0.630000
+Sine Distance to U* : 0.449062
+Regression Task Score : 0.455183
+60, 40, 5000
+Sine Distance to U* : 0.220780
+Classification Task Score : 0.636000
+Sine Distance to U* : 0.220780
+Regression Task Score : 0.456959
+60, 40, 10000
+Sine Distance to U* : 0.095619
+Classification Task Score : 0.641000
+Sine Distance to U* : 0.095619
+Regression Task Score : 0.456588
+60, 40, 20000
+Sine Distance to U* : 0.069639
+Classification Task Score : 0.640000
+Sine Distance to U* : 0.069639
+Regression Task Score : 0.455885
+60, 40, 30000
+Sine Distance to U* : 0.056048
+Classification Task Score : 0.636000
+Sine Distance to U* : 0.056048
+Regression Task Score : 0.456505
+60, 40, 40000
+Sine Distance to U* : 0.052748
+Classification Task Score : 0.639000
+Sine Distance to U* : 0.052748
+Regression Task Score : 0.456346
+60, 40, 50000
+Sine Distance to U* : 0.050549
+Classification Task Score : 0.639000
+Sine Distance to U* : 0.050549
+Regression Task Score : 0.456027
+70, 10, 20000
+Sine Distance to U* : 0.000000
+Classification Task Score : 0.629000
+Sine Distance to U* : 0.000000
+Regression Task Score : 0.459440
+70, 20, 20000
+Sine Distance to U* : 0.040452
+Classification Task Score : 0.643000
+Sine Distance to U* : 0.040452
+Regression Task Score : 0.468301
+70, 30, 20000
+Sine Distance to U* : 0.058085
+Classification Task Score : 0.634000
+Sine Distance to U* : 0.058085
+Regression Task Score : 0.460784
+70, 40, 20000
+Sine Distance to U* : 0.069585
+Classification Task Score : 0.650000
+Sine Distance to U* : 0.069585
+Regression Task Score : 0.453918
+70, 50, 20000
+Sine Distance to U* : 0.080819
+Classification Task Score : 0.651000
+Sine Distance to U* : 0.080819
+Regression Task Score : 0.466090
+70, 60, 20000
+Sine Distance to U* : 0.090366
+Classification Task Score : 0.655000
+Sine Distance to U* : 0.090366
+Regression Task Score : 0.445534
+70, 70, 20000
+Sine Distance to U* : 0.098666
+Classification Task Score : 0.616000
+Sine Distance to U* : 0.098666
+Regression Task Score : 0.460823
+70, 80, 20000
+Sine Distance to U* : 0.109041
+Classification Task Score : 0.637000
+Sine Distance to U* : 0.109041
+Regression Task Score : 0.463950
+70, 90, 20000
+Sine Distance to U* : 0.112606
+Classification Task Score : 0.680000
+Sine Distance to U* : 0.112606
+Regression Task Score : 0.448407
+70, 100, 20000
+Sine Distance to U* : 0.127302
+Classification Task Score : 0.616000
+Sine Distance to U* : 0.127302
+Regression Task Score : 0.447400
+70, 110, 20000
+Sine Distance to U* : 0.134518
+Classification Task Score : 0.639000
+Sine Distance to U* : 0.134518
+Regression Task Score : 0.476852
+70, 40, 1000
+Sine Distance to U* : 1.924056
+Classification Task Score : 0.627000
+Sine Distance to U* : 1.924056
+Regression Task Score : 0.549953
+70, 40, 2000
+Sine Distance to U* : 1.124327
+Classification Task Score : 0.640000
+Sine Distance to U* : 1.124327
+Regression Task Score : 0.470269
+70, 40, 3000
+Sine Distance to U* : 0.615732
+Classification Task Score : 0.653000
+Sine Distance to U* : 0.615732
+Regression Task Score : 0.458197
+70, 40, 4000
+Sine Distance to U* : 0.315320
+Classification Task Score : 0.652000
+Sine Distance to U* : 0.315320
+Regression Task Score : 0.454379
+70, 40, 5000
+Sine Distance to U* : 0.183512
+Classification Task Score : 0.651000
+Sine Distance to U* : 0.183512
+Regression Task Score : 0.455178
+70, 40, 10000
+Sine Distance to U* : 0.105522
+Classification Task Score : 0.650000
+Sine Distance to U* : 0.105522
+Regression Task Score : 0.453527
+70, 40, 20000
+Sine Distance to U* : 0.069585
+Classification Task Score : 0.650000
+Sine Distance to U* : 0.069585
+Regression Task Score : 0.453918
+70, 40, 30000
+Sine Distance to U* : 0.060331
+Classification Task Score : 0.654000
+Sine Distance to U* : 0.060331
+Regression Task Score : 0.454352
+70, 40, 40000
+Sine Distance to U* : 0.054494
+Classification Task Score : 0.652000
+Sine Distance to U* : 0.054494
+Regression Task Score : 0.454427
+70, 40, 50000
+Sine Distance to U* : 0.046762
+Classification Task Score : 0.652000
+Sine Distance to U* : 0.046762
+Regression Task Score : 0.454339
+80, 10, 20000
+Sine Distance to U* : 0.000000
+Classification Task Score : 0.633000
+Sine Distance to U* : 0.000000
+Regression Task Score : 0.454277
+80, 20, 20000
+Sine Distance to U* : 0.041833
+Classification Task Score : 0.642000
+Sine Distance to U* : 0.041833
+Regression Task Score : 0.462497
+80, 30, 20000
+Sine Distance to U* : 0.053028
+Classification Task Score : 0.646000
+Sine Distance to U* : 0.053028
+Regression Task Score : 0.469985
+80, 40, 20000
+Sine Distance to U* : 0.068834
+Classification Task Score : 0.658000
+Sine Distance to U* : 0.068834
+Regression Task Score : 0.458634
+80, 50, 20000
+Sine Distance to U* : 0.080939
+Classification Task Score : 0.648000
+Sine Distance to U* : 0.080939
+Regression Task Score : 0.455661
+80, 60, 20000
+Sine Distance to U* : 0.092270
+Classification Task Score : 0.663000
+Sine Distance to U* : 0.092270
+Regression Task Score : 0.459719
+80, 70, 20000
+Sine Distance to U* : 0.096668
+Classification Task Score : 0.641000
+Sine Distance to U* : 0.096668
+Regression Task Score : 0.472364
+80, 80, 20000
+Sine Distance to U* : 0.103972
+Classification Task Score : 0.645000
+Sine Distance to U* : 0.103972
+Regression Task Score : 0.468875
+80, 90, 20000
+Sine Distance to U* : 0.115091
+Classification Task Score : 0.629000
+Sine Distance to U* : 0.115091
+Regression Task Score : 0.460266
+80, 100, 20000
+Sine Distance to U* : 0.119701
+Classification Task Score : 0.658000
+Sine Distance to U* : 0.119701
+Regression Task Score : 0.462495
+80, 110, 20000
+Sine Distance to U* : 0.126561
+Classification Task Score : 0.637000
+Sine Distance to U* : 0.126561
+Regression Task Score : 0.444097
+80, 40, 1000
+Sine Distance to U* : 2.102894
+Classification Task Score : 0.631000
+Sine Distance to U* : 2.102894
+Regression Task Score : 0.558835
+80, 40, 2000
+Sine Distance to U* : 1.388253
+Classification Task Score : 0.651000
+Sine Distance to U* : 1.388253
+Regression Task Score : 0.500837
+80, 40, 3000
+Sine Distance to U* : 0.738463
+Classification Task Score : 0.654000
+Sine Distance to U* : 0.738463
+Regression Task Score : 0.470799
+80, 40, 4000
+Sine Distance to U* : 0.420835
+Classification Task Score : 0.659000
+Sine Distance to U* : 0.420835
+Regression Task Score : 0.459473
+80, 40, 5000
+Sine Distance to U* : 0.280060
+Classification Task Score : 0.658000
+Sine Distance to U* : 0.280060
+Regression Task Score : 0.460337
+80, 40, 10000
+Sine Distance to U* : 0.094961
+Classification Task Score : 0.658000
+Sine Distance to U* : 0.094961
+Regression Task Score : 0.458918
+80, 40, 20000
+Sine Distance to U* : 0.068834
+Classification Task Score : 0.658000
+Sine Distance to U* : 0.068834
+Regression Task Score : 0.458634
+80, 40, 30000
+Sine Distance to U* : 0.054871
+Classification Task Score : 0.662000
+Sine Distance to U* : 0.054871
+Regression Task Score : 0.458590
+80, 40, 40000
+Sine Distance to U* : 0.049376
+Classification Task Score : 0.662000
+Sine Distance to U* : 0.049376
+Regression Task Score : 0.458768
+80, 40, 50000
+Sine Distance to U* : 0.050957
+Classification Task Score : 0.662000
+Sine Distance to U* : 0.050957
+Regression Task Score : 0.458594
+90, 10, 20000
+Sine Distance to U* : 0.000000
+Classification Task Score : 0.667000
+Sine Distance to U* : 0.000000
+Regression Task Score : 0.484930
+90, 20, 20000
+Sine Distance to U* : 0.036067
+Classification Task Score : 0.633000
+Sine Distance to U* : 0.036067
+Regression Task Score : 0.446818
+90, 30, 20000
+Sine Distance to U* : 0.059825
+Classification Task Score : 0.642000
+Sine Distance to U* : 0.059825
+Regression Task Score : 0.463675
+90, 40, 20000
+Sine Distance to U* : 0.069668
+Classification Task Score : 0.640000
+Sine Distance to U* : 0.069668
+Regression Task Score : 0.459082
+90, 50, 20000
+Sine Distance to U* : 0.078509
+Classification Task Score : 0.654000
+Sine Distance to U* : 0.078509
+Regression Task Score : 0.471420
+90, 60, 20000
+Sine Distance to U* : 0.091125
+Classification Task Score : 0.683000
+Sine Distance to U* : 0.091125
+Regression Task Score : 0.475793
+90, 70, 20000
+Sine Distance to U* : 0.099643
+Classification Task Score : 0.652000
+Sine Distance to U* : 0.099643
+Regression Task Score : 0.450094
+90, 80, 20000
+Sine Distance to U* : 0.109336
+Classification Task Score : 0.657000
+Sine Distance to U* : 0.109336
+Regression Task Score : 0.457085
+90, 90, 20000
+Sine Distance to U* : 0.115938
+Classification Task Score : 0.630000
+Sine Distance to U* : 0.115938
+Regression Task Score : 0.466393
+90, 100, 20000
+Sine Distance to U* : 0.126565
+Classification Task Score : 0.649000
+Sine Distance to U* : 0.126565
+Regression Task Score : 0.464875
+90, 110, 20000
+Sine Distance to U* : 0.136624
+Classification Task Score : 0.675000
+Sine Distance to U* : 0.136624
+Regression Task Score : 0.471031
+90, 40, 1000
+Sine Distance to U* : 2.122228
+Classification Task Score : 0.648000
+Sine Distance to U* : 2.122228
+Regression Task Score : 0.509983
+90, 40, 2000
+Sine Distance to U* : 1.182755
+Classification Task Score : 0.641000
+Sine Distance to U* : 1.182755
+Regression Task Score : 0.471822
+90, 40, 3000
+Sine Distance to U* : 0.568103
+Classification Task Score : 0.641000
+Sine Distance to U* : 0.568103
+Regression Task Score : 0.461953
+90, 40, 4000
+Sine Distance to U* : 0.292765
+Classification Task Score : 0.637000
+Sine Distance to U* : 0.292765
+Regression Task Score : 0.461297
+90, 40, 5000
+Sine Distance to U* : 0.172794
+Classification Task Score : 0.638000
+Sine Distance to U* : 0.172794
+Regression Task Score : 0.460047
+90, 40, 10000
+Sine Distance to U* : 0.092656
+Classification Task Score : 0.643000
+Sine Distance to U* : 0.092656
+Regression Task Score : 0.459637
+90, 40, 20000
+Sine Distance to U* : 0.069668
+Classification Task Score : 0.640000
+Sine Distance to U* : 0.069668
+Regression Task Score : 0.459082
+90, 40, 30000
+Sine Distance to U* : 0.061460
+Classification Task Score : 0.641000
+Sine Distance to U* : 0.061460
+Regression Task Score : 0.458916
+90, 40, 40000
+Sine Distance to U* : 0.054820
+Classification Task Score : 0.635000
+Sine Distance to U* : 0.054820
+Regression Task Score : 0.459097
+90, 40, 50000
+Sine Distance to U* : 0.051950
+Classification Task Score : 0.639000
+Sine Distance to U* : 0.051950
+Regression Task Score : 0.458935
