@@ -87,23 +87,30 @@ class SelfconLoss(nn.Module):
 
 class DataHandler(Dataset):
     def generate_random_mask(self, size):
-        mask_percentage = 0.1
-        random_mask = np.random.rand(size)
-        random_mask[random_mask > mask_percentage] = 1
-        random_mask[random_mask <= mask_percentage] = 0
+        mask_percentage = 0.5
+        mask_size = int(mask_percentage*size)
+        random_mask = np.concatenate([np.ones(size - mask_size), np.zeros(mask_size)])
+        np.random.shuffle(random_mask)
+
         random_mask = np.diag(random_mask)
         return torch.tensor(random_mask)
 
-    def __init__(self, X):
+    def __init__(self, X, flip_mask=False):
         self.X = X
         self.mask_size = X.size()[1]
-        self.random_mask_1 = self.generate_random_mask(self.mask_size)
-        self.random_mask_2 = self.generate_random_mask(self.mask_size)
+        self.flip_mask = flip_mask
 
     def __getitem__(self, index):
         x = self.X[index]
-        x1 = torch.matmul(self.generate_random_mask(self.mask_size), x)
-        x2 = torch.matmul(self.generate_random_mask(self.mask_size), x)
+
+        mask1 = self.generate_random_mask(self.mask_size)
+        x1 = torch.matmul(mask1, x)
+
+        if self.flip_mask:
+            mask2 = 1 - mask1
+        else:
+            mask2 = self.generate_random_mask(self.mask_size)
+        x2 = torch.matmul(mask2, x)
         return x1, x2
 
     def __len__(self):
@@ -144,7 +151,7 @@ def contrastive_training(r, d, x, ustar, loss_fn, batch_size, num_epochs, lr, la
     x = torch.tensor(x)
     device = 'cuda' if cuda else 'cpu'
     # print(f"Train Data Shape: {x.size()}")
-    train_loader = DataLoader(DataHandler(x), shuffle=True, batch_size=batch_size, drop_last=True)
+    train_loader = DataLoader(DataHandler(x, flip_mask=True), shuffle=True, batch_size=batch_size, drop_last=True)
     # Model
     model = linear_CL_Model(d, r).double().to(device)
     # print(f"Model Size: {model.linear.weight.size()}")
