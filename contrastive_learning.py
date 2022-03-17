@@ -91,7 +91,7 @@ class SelfconLoss(nn.Module):
 
 class DataHandler(Dataset):
     def generate_random_mask(self, size):
-        mask_percentage = 0.1
+        mask_percentage = 0.5
         mask_size = int(mask_percentage*size)
         random_mask = np.concatenate([np.ones(size - mask_size), np.zeros(mask_size)])
         np.random.shuffle(random_mask)
@@ -103,18 +103,23 @@ class DataHandler(Dataset):
         self.X = X
         self.input_size = X.size()[1]
         self.flip_mask = flip_mask
+        self.mask1 = self.generate_random_mask(self.input_size)
+        if flip_mask:
+            self.mask2 = torch.diag(1 - torch.diag(self.mask1))
+        else:
+            self.mask2 = self.generate_random_mask(self.input_size)
 
     def __getitem__(self, index):
         x = self.X[index]
 
-        mask1 = self.generate_random_mask(self.input_size)
-        x1 = torch.matmul(mask1, x)
+        # mask1 = self.generate_random_mask(self.input_size)
+        x1 = torch.matmul(self.mask1, x)
 
-        if self.flip_mask:
-            mask2 = 1 - mask1
-        else:
-            mask2 = self.generate_random_mask(self.input_size)
-        x2 = torch.matmul(mask2, x)
+        # if self.flip_mask:
+        #     mask2 = 1 - mask1
+        # else:
+        #     mask2 = self.generate_random_mask(self.input_size)
+        x2 = torch.matmul(self.mask2, x)
         return x1, x2
 
     def __len__(self):
@@ -155,7 +160,7 @@ def contrastive_training(r, d, x, ustar, loss_fn, batch_size, num_epochs, lr, la
     x = torch.tensor(x)
     device = 'cuda' if cuda else 'cpu'
     # print(f"Train Data Shape: {x.size()}")
-    train_loader = DataLoader(DataHandler(x), shuffle=True, batch_size=batch_size, drop_last=True)
+    train_loader = DataLoader(DataHandler(x, flip_mask=True), shuffle=True, batch_size=batch_size, drop_last=True)
     # Model
     model = linear_CL_Model(d, r).double().to(device)
     # print(f"Model Size: {model.linear.weight.size()}")
