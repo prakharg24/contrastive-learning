@@ -49,6 +49,10 @@ class NT_Xent(nn.Module):
         positive_samples = torch.cat((sim_i_j, sim_j_i), dim=0).reshape(N, 1)
         negative_samples = sim[self.mask].reshape(N, -1)
 
+        # numerator = torch.exp(positive_samples).squeeze()
+        # denominator = torch.sum(torch.exp(negative_samples), dim=1) + numerator
+        # loss = -torch.log((numerator / denominator) + 1e-10).mean()
+
         labels = torch.zeros(N).to(positive_samples.device).long()
         logits = torch.cat((positive_samples, negative_samples), dim=1)
         loss = self.criterion(logits, labels)
@@ -87,7 +91,7 @@ class SelfconLoss(nn.Module):
 
 class DataHandler(Dataset):
     def generate_random_mask(self, size):
-        mask_percentage = 0.5
+        mask_percentage = 0.1
         mask_size = int(mask_percentage*size)
         random_mask = np.concatenate([np.ones(size - mask_size), np.zeros(mask_size)])
         np.random.shuffle(random_mask)
@@ -97,19 +101,19 @@ class DataHandler(Dataset):
 
     def __init__(self, X, flip_mask=False):
         self.X = X
-        self.mask_size = X.size()[1]
+        self.input_size = X.size()[1]
         self.flip_mask = flip_mask
 
     def __getitem__(self, index):
         x = self.X[index]
 
-        mask1 = self.generate_random_mask(self.mask_size)
+        mask1 = self.generate_random_mask(self.input_size)
         x1 = torch.matmul(mask1, x)
 
         if self.flip_mask:
             mask2 = 1 - mask1
         else:
-            mask2 = self.generate_random_mask(self.mask_size)
+            mask2 = self.generate_random_mask(self.input_size)
         x2 = torch.matmul(mask2, x)
         return x1, x2
 
@@ -151,7 +155,7 @@ def contrastive_training(r, d, x, ustar, loss_fn, batch_size, num_epochs, lr, la
     x = torch.tensor(x)
     device = 'cuda' if cuda else 'cpu'
     # print(f"Train Data Shape: {x.size()}")
-    train_loader = DataLoader(DataHandler(x, flip_mask=True), shuffle=True, batch_size=batch_size, drop_last=True)
+    train_loader = DataLoader(DataHandler(x), shuffle=True, batch_size=batch_size, drop_last=True)
     # Model
     model = linear_CL_Model(d, r).double().to(device)
     # print(f"Model Size: {model.linear.weight.size()}")
