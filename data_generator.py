@@ -1,5 +1,5 @@
 import numpy as np
-
+from test_utils import sinedistance_eigenvectors
 class SpikedCovarianceDataset():
     def __init__(self, r, d, sigma, noise_sigma, label_mode='cls'):
         ## Setting hyperparameters for data generation
@@ -11,6 +11,13 @@ class SpikedCovarianceDataset():
         ## Creating orthonormal matrix U* through SVD
         u, s, vh = np.linalg.svd(np.random.rand(d, r), full_matrices=False)
         self.ustar = np.matmul(u, vh)
+
+        # Test Random
+        u, s, vh = np.linalg.svd(np.random.rand(d, r), full_matrices=False)
+        random = np.matmul(u, vh).T
+        random_2 = np.random.rand(d, r).T
+        print(sinedistance_eigenvectors(self.ustar, random))
+        print(sinedistance_eigenvectors(self.ustar, random_2))
 
         ## Creating Optimal Classifier Vector w*
         self.wstar = np.random.rand(r)
@@ -27,6 +34,9 @@ class SpikedCovarianceDataset():
         ## Noise Sigma E
         noise = np.random.normal(0., self.noise_sigma, self.d*batch_size)
         noise = noise.reshape(self.d, batch_size)
+        # noise = np.zeros((self.d, batch_size))
+        # for idx in range(len(noise)):
+        #     noise[idx] = np.random.normal(0., self.noise_sigma/(idx+1), batch_size)
 
         ## Input features are U*z + E
         input_features = np.matmul(self.ustar, signal) + noise

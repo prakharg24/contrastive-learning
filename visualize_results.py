@@ -1,9 +1,9 @@
 import csv
 import matplotlib.pyplot as plt
 if __name__ == "__main__":
-    experiment = "increase_noise"
-    # metric = "sinedistance"
-    metric = "downstream_score"
+    experiment = "increase_dimension_d"
+    metric = "sinedistance"
+    # metric = "downstream_score"
     rows = []
     with open(f"{experiment}_{metric}.csv") as f:
         csvreader = csv.reader(f)

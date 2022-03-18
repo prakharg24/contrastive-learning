@@ -71,7 +71,7 @@ def run(args):
     ## Add more modes if required
 
 
-if __name__ == "__main__":
+def obtain_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--mode", default="both", help="Set Experiment Mode")
     parser.add_argument("--model", default="ae", help="Set Experiment Model")
@@ -80,12 +80,11 @@ if __name__ == "__main__":
     parser.add_argument("--gpus", default="0,1", help="GPU Device ID to use separated by commas")
     parser.add_argument("--seed", default=0, help="Random seed to allow replication of results")
 
-
     ## Parameters for Data Generation
     parser.add_argument("--r", type=int, default=10, help="Representation Dimension of Original Signal")
     parser.add_argument("--d", type=int, default=40, help="Representation Dimension of Generated Input")
     parser.add_argument("--sigma", type=float, default=1., help="Standard Deviation of original signal")
-    parser.add_argument("--noise_sigma", type=float, default=0.5, help="Standard Deviation of original signal")
+    parser.add_argument("--noise_sigma", type=float, default=4, help="Standard Deviation of noise signal")
 
     ## Parameters for Training
     ## Add more and change as required
@@ -93,9 +92,9 @@ if __name__ == "__main__":
     parser.add_argument("--lr", type=float, default=3e-4, help="Learning rate")
     parser.add_argument("--batch_size", type=int, default=32, help="Batch Size for Training")
     parser.add_argument("--epochs", type=int, default=1000, help="Number of Steps for Training")
-    parser.add_argument("--train_size", type=int, default=10000, help="Number of data points of unsupervised learning")
+    parser.add_argument("--train_size", type=int, default=1000, help="Number of data points of unsupervised learning")
     parser.add_argument("--test_size", type=int, default=1000, help="Number of data points of testing")
-    parser.add_argument("--lam", type=float, default=1e-1, help="Weight of regularization term")
+    parser.add_argument("--lam", type=float, default=1e-3, help="Weight of regularization term")
     parser.add_argument("--patience", type=int, default=10, help="Patience for early stopping")
 
     ## Parameters for Downstream Task
@@ -103,7 +102,10 @@ if __name__ == "__main__":
     parser.add_argument("--dwn_model", default="linear", help="Use SVM model for downstream classification")
 
     args = parser.parse_args()
+    return args
+if __name__ == "__main__":
 
+    args = obtain_args()
     run(args)
     # sinedistance_score, score = run(args)
     # print(sinedistance_score, score)
