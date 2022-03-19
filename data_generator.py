@@ -1,5 +1,8 @@
 import numpy as np
 from test_utils import sinedistance_eigenvectors
+import math
+
+
 class SpikedCovarianceDataset():
     def __init__(self, r, d, sigma, noise_sigma, label_mode='cls'):
         ## Setting hyperparameters for data generation
@@ -11,13 +14,10 @@ class SpikedCovarianceDataset():
         ## Creating orthonormal matrix U* through SVD
         u, s, vh = np.linalg.svd(np.random.rand(d, r), full_matrices=False)
         self.ustar = np.matmul(u, vh)
-
-        # Test Random
-        u, s, vh = np.linalg.svd(np.random.rand(d, r), full_matrices=False)
-        random = np.matmul(u, vh).T
-        random_2 = np.random.rand(d, r).T
-        print(sinedistance_eigenvectors(self.ustar, random))
-        print(sinedistance_eigenvectors(self.ustar, random_2))
+        # Scale U* s.t. incoherence condition is satisfied
+        incoherence = self.calc_incoherence()
+        ideal_incoherence = self.get_ideal_incoherence()
+        self.ustar = self.ustar / math.sqrt(incoherence) * math.sqrt(ideal_incoherence)
 
         ## Creating Optimal Classifier Vector w*
         self.wstar = np.random.rand(r)
@@ -26,17 +26,35 @@ class SpikedCovarianceDataset():
         ## Setting label mode to 'classification' or 'regression'
         self.label_mode = label_mode
 
+    def get_ideal_incoherence(self):
+        return self.r * math.log(self.d) / self.d
+
+    def calc_incoherence(self):
+        max_incoherence = 0
+        for i in range(self.d):
+            basis = np.zeros(self.d)
+            basis[i] = 1
+            # incoherence is now the i-th row of U
+            incoherence = np.matmul(basis.T, self.ustar)
+            # Retain the max squared norm
+            max_incoherence = max(max_incoherence, np.linalg.norm(incoherence) ** 2)
+        return max_incoherence
+
     def get_next_batch(self, batch_size=64):
         ## Original Signal z
         signal = np.random.normal(0., self.sigma, self.r*batch_size)
         signal = signal.reshape(self.r, batch_size)
 
         ## Noise Sigma E
-        noise = np.random.normal(0., self.noise_sigma, self.d*batch_size)
-        noise = noise.reshape(self.d, batch_size)
-        # noise = np.zeros((self.d, batch_size))
-        # for idx in range(len(noise)):
-        #     noise[idx] = np.random.normal(0., self.noise_sigma/(idx+1), batch_size)
+        # noise = np.random.normal(0., self.noise_sigma, self.d*batch_size)
+        # noise = noise.reshape(self.d, batch_size)
+
+        # Heteroskedastic noise
+        noise = np.zeros((self.d, batch_size))
+        for idx in range(len(noise)):
+            # For every dimension, decrease the noise_sigma by a constant until we reach 0
+            heteroskedastic_noise_sigma = self.noise_sigma - self.noise_sigma/self.d * idx
+            noise[idx] = np.random.normal(0., heteroskedastic_noise_sigma, batch_size)
 
         ## Input features are U*z + E
         input_features = np.matmul(self.ustar, signal) + noise

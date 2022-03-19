@@ -84,18 +84,18 @@ def obtain_args():
     parser.add_argument("--r", type=int, default=10, help="Representation Dimension of Original Signal")
     parser.add_argument("--d", type=int, default=40, help="Representation Dimension of Generated Input")
     parser.add_argument("--sigma", type=float, default=1., help="Standard Deviation of original signal")
-    parser.add_argument("--noise_sigma", type=float, default=4, help="Standard Deviation of noise signal")
+    parser.add_argument("--noise_sigma", type=float, default=1, help="Standard Deviation of noise signal")
 
     ## Parameters for Training
     ## Add more and change as required
     parser.add_argument("--r_model", type=int, default=10, help="Representation Dimension of Model Output")
     parser.add_argument("--lr", type=float, default=3e-4, help="Learning rate")
     parser.add_argument("--batch_size", type=int, default=32, help="Batch Size for Training")
-    parser.add_argument("--epochs", type=int, default=1000, help="Number of Steps for Training")
-    parser.add_argument("--train_size", type=int, default=1000, help="Number of data points of unsupervised learning")
+    parser.add_argument("--epochs", type=int, default=20000, help="Number of Steps for Training")
+    parser.add_argument("--train_size", type=int, default=20000, help="Number of data points of unsupervised learning")
     parser.add_argument("--test_size", type=int, default=1000, help="Number of data points of testing")
     parser.add_argument("--lam", type=float, default=1e-3, help="Weight of regularization term")
-    parser.add_argument("--patience", type=int, default=10, help="Patience for early stopping")
+    parser.add_argument("--patience", type=int, default=50, help="Patience for early stopping")
 
     ## Parameters for Downstream Task
     parser.add_argument("--dwn_mode", default="reg", help="Classification mode for downstream labels")
