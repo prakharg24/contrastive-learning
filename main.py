@@ -15,7 +15,6 @@ def run(args):
     np.random.seed(int(args.seed))
     random.seed(int(args.seed))
     torch.manual_seed(int(args.seed))
-
     ## Call data generator
     generator = SpikedCovarianceDataset(args.r, args.d, args.sigma, args.noise_sigma, label_mode=args.dwn_mode)
     X_train, y_train, r_train = generator.get_next_batch(batch_size=args.train_size)

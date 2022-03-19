@@ -14,6 +14,7 @@ class SpikedCovarianceDataset():
         ## Creating orthonormal matrix U* through SVD
         u, s, vh = np.linalg.svd(np.random.rand(d, r), full_matrices=False)
         self.ustar = np.matmul(u, vh)
+
         # Scale U* s.t. incoherence condition is satisfied
         incoherence = self.calc_incoherence()
         ideal_incoherence = self.get_ideal_incoherence()

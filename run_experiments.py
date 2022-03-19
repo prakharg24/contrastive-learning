@@ -16,7 +16,7 @@ if __name__ == "__main__":
     for model in ["ae", "cl"]:
         sinedistance_scores[model] = [model]
         downstream_scores[model] = [model]
-        
+
         if args.experiment == "increase_dimension_d":
             dimensions = ["Dimension", 10, 30, 50, 70, 90, 110]
             for dimension in dimensions[1:]:
@@ -29,7 +29,7 @@ if __name__ == "__main__":
             n_values = ["n", 1000, 2000, 3000, 4000, 5000, 10000, 20000, 30000, 50000]
             for n in n_values[1:]:
                 args.model = model
-                args.n = n
+                args.train_size = n
                 sinedistance_score, score = run(args)
                 sinedistance_scores[model].append(sinedistance_score)
                 downstream_scores[model].append(score)
