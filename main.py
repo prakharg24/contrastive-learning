@@ -16,7 +16,7 @@ def run(args):
     random.seed(int(args.seed))
     torch.manual_seed(int(args.seed))
     ## Call data generator
-    generator = SpikedCovarianceDataset(args.r, args.d, args.sigma, args.noise_sigma, label_mode=args.dwn_mode)
+    generator = SpikedCovarianceDataset(args.r, args.d, args.sigma, args.noise_sigma, args.het_bound, label_mode=args.dwn_mode)
     X_train, y_train, r_train = generator.get_next_batch(batch_size=args.train_size)
     X_test, y_test, r_test = generator.get_next_batch(batch_size=args.test_size)
 
@@ -84,6 +84,7 @@ def obtain_args():
     parser.add_argument("--d", type=int, default=40, help="Representation Dimension of Generated Input")
     parser.add_argument("--sigma", type=float, default=1., help="Standard Deviation of original signal")
     parser.add_argument("--noise_sigma", type=float, default=1., help="Standard Deviation of noise signal")
+    parser.add_argument("--het_bound", type=float, default=2., help="Heteroskedastic noise ratio bound")
 
     ## Parameters for Training
     ## Add more and change as required

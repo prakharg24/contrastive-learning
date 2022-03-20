@@ -1,6 +1,13 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+# ratio_bound = [1, 2, 3, 4, 5]
+# sinedistance = [1.277072, 1.567626, 1.774886, 1.896988, 1.975354]
+#
+# plt.plot(ratio_bound, sinedistance)
+# plt.savefig('Heteroskedastic_noise.png')
+# exit()
+
 # d = 200
 d_array = range(200, 250)
 r = 50

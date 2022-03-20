@@ -4,12 +4,13 @@ import math
 
 
 class SpikedCovarianceDataset():
-    def __init__(self, r, d, sigma, noise_sigma, label_mode='cls'):
+    def __init__(self, r, d, sigma, noise_sigma, heteroskedastic_bound, label_mode='cls'):
         ## Setting hyperparameters for data generation
         self.r = r
         self.d = d
         self.sigma = sigma
         self.noise_sigma = noise_sigma
+        self.heteroskedastic_bound = heteroskedastic_bound
 
         ## Creating orthonormal matrix U* through SVD
         u, s, vh = np.linalg.svd(np.random.rand(d, r), full_matrices=False)
@@ -52,9 +53,11 @@ class SpikedCovarianceDataset():
 
         # Heteroskedastic noise
         noise = np.zeros((self.d, batch_size))
+        ratio_bound = self.heteroskedastic_bound
         for idx in range(len(noise)):
-            # For every dimension, decrease the noise_sigma by a constant until we reach 0
-            heteroskedastic_noise_sigma = self.noise_sigma - self.noise_sigma/self.d * idx
+            # For every dimension, decrease the noise_sigma by a constant until we reach ratio bound
+            heteroskedastic_noise_sigma = self.noise_sigma - \
+                                          (self.noise_sigma - self.noise_sigma/ratio_bound)/len(noise) * idx
             noise[idx] = np.random.normal(0., heteroskedastic_noise_sigma, batch_size)
 
         ## Input features are U*z + E
