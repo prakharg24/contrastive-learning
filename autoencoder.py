@@ -7,6 +7,8 @@ import math
 import numpy as np
 from tqdm import tqdm
 
+from contrastive_learning import DataHandler
+
 '''
 POTENTIAL CHANGES FOR EXPERIMENTS:
 
@@ -67,17 +69,20 @@ def regularization_loss(weight, lam):
     return lam / 2 * torch.linalg.matrix_norm(torch.square(torch.matmul(weight, weight.T)), ord='fro')
 
 def auto_encoder(d, r, X, batch_size, num_epochs, lr, single_layer, requires_relu, lam, patience, cuda=True):
-    X = torch.Tensor(X)
+    X = torch.tensor(X)
     device = 'cuda' if cuda else 'cpu'
 
     # Load training data
-    train_dataloader = DataLoader(X, batch_size=batch_size, shuffle=True, drop_last=True)
+    train_dataloader = DataLoader(DataHandler(X, flip_mask=True), batch_size=batch_size, shuffle=True, drop_last=True)
+    # for batch in train_dataloader:
+    #     print(batch)
+    #     exit()
     # Model
     model = AutoEncoder(d, r, single_layer, requires_relu)
     # print(model)
     optimizer = optim.Adam(model.parameters(), lr)
     criterion = nn.MSELoss()
-    model.to(device)
+    model.double().to(device)
 
     loss_log = tqdm(total=0, position=1, bar_format='{desc}')
     patience_steps = 0
@@ -87,6 +92,7 @@ def auto_encoder(d, r, X, batch_size, num_epochs, lr, single_layer, requires_rel
         loss_epoch = 0
         for batch_id, batch_data in enumerate(train_dataloader):
             optimizer.zero_grad()
+            batch_data = torch.cat(batch_data, 0)
             batch_data = batch_data.to(device)
             prediction = model(batch_data)
             loss = criterion(prediction, batch_data)

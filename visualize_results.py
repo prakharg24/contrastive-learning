@@ -1,7 +1,9 @@
 import csv
 import matplotlib.pyplot as plt
 if __name__ == "__main__":
-    experiment = "increase_dimension_d"
+    # experiment = "increase_dimension_d"
+    # experiment = "increase_n"
+    experiment = "increase_dimension_d_and_r"
     metric = "sinedistance"
     # metric = "downstream_score"
     rows = []
@@ -15,4 +17,5 @@ if __name__ == "__main__":
     plt.xlabel(header[0])
     plt.ylabel(metric)
     plt.legend()
-    plt.show()
+    # plt.show()
+    plt.savefig(f"{experiment}_{metric}.png")

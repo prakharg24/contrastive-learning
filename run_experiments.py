@@ -6,10 +6,10 @@ import csv
 if __name__ == "__main__":
     args = obtain_args()
     # args.experiment = "increase_noise"
-    #args.experiment = "increase_dimension_d"
+    # args.experiment = "increase_dimension_d"
     #args.experiment = "increase_dimension_r"
-    #args.experiment = "increase_dimension_d_and_r"
-    args.experiment = "increase_n"
+    args.experiment = "increase_dimension_d_and_r"
+    # args.experiment = "increase_n"
 
     sinedistance_scores = {}
     downstream_scores = {}
@@ -18,15 +18,24 @@ if __name__ == "__main__":
         downstream_scores[model] = [model]
 
         if args.experiment == "increase_dimension_d":
-            dimensions = ["Dimension", 10, 30, 50, 70, 90, 110]
+            dimensions = ["Dimension", 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110]
             for dimension in dimensions[1:]:
                 args.model = model
                 args.d = dimension
                 sinedistance_score, score = run(args)
                 sinedistance_scores[model].append(sinedistance_score)
                 downstream_scores[model].append(score)
+        if args.experiment == "increase_dimension_d_and_r":
+            dimensions = ["Dimension", 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110]
+            for dimension in dimensions[1:]:
+                args.model = model
+                args.d = dimension
+                args.r = dimension//10
+                sinedistance_score, score = run(args)
+                sinedistance_scores[model].append(sinedistance_score)
+                downstream_scores[model].append(score)
         if args.experiment == "increase_n":
-            n_values = ["n", 1000, 2000, 3000, 4000, 5000, 10000, 20000, 30000, 50000]
+            n_values = ["n", 1000, 2000, 3000, 4000, 5000, 10000, 20000, 30000, 40000, 50000]
             for n in n_values[1:]:
                 args.model = model
                 args.train_size = n
