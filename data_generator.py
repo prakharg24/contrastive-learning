@@ -16,9 +16,9 @@ class SpikedCovarianceDataset():
         self.ustar = np.matmul(u, vh)
 
         # Scale U* s.t. incoherence condition is satisfied
-        incoherence = self.calc_incoherence()
-        ideal_incoherence = self.get_ideal_incoherence()
-        self.ustar = self.ustar / math.sqrt(incoherence) * math.sqrt(ideal_incoherence)
+        # incoherence = self.calc_incoherence()
+        # ideal_incoherence = self.get_ideal_incoherence()
+        # self.ustar = self.ustar / math.sqrt(incoherence) * math.sqrt(ideal_incoherence)
 
         ## Creating Optimal Classifier Vector w*
         self.wstar = np.random.rand(r)

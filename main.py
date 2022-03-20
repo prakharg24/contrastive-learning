@@ -83,7 +83,7 @@ def obtain_args():
     parser.add_argument("--r", type=int, default=10, help="Representation Dimension of Original Signal")
     parser.add_argument("--d", type=int, default=40, help="Representation Dimension of Generated Input")
     parser.add_argument("--sigma", type=float, default=1., help="Standard Deviation of original signal")
-    parser.add_argument("--noise_sigma", type=float, default=1, help="Standard Deviation of noise signal")
+    parser.add_argument("--noise_sigma", type=float, default=1., help="Standard Deviation of noise signal")
 
     ## Parameters for Training
     ## Add more and change as required
