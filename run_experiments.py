@@ -3,13 +3,12 @@ import argparse
 import csv
 
 
-if __name__ == "__main__":
-    args = obtain_args()
+def run_all_exp(args):
     # args.experiment = "increase_noise"
     # args.experiment = "increase_dimension_d"
-    #args.experiment = "increase_dimension_r"
-    args.experiment = "increase_dimension_d_and_r"
-    # args.experiment = "increase_n"
+    # args.experiment = "increase_dimension_r"
+    # args.experiment = "increase_dimension_d_and_r"
+    args.experiment = "increase_n"
 
     sinedistance_scores = {}
     downstream_scores = {}
@@ -18,7 +17,7 @@ if __name__ == "__main__":
         downstream_scores[model] = [model]
 
         if args.experiment == "increase_dimension_d":
-            dimensions = ["Dimension", 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110]
+            dimensions = ["Dimension", 20, 30, 40, 50, 60, 70, 80, 90, 100, 110]
             for dimension in dimensions[1:]:
                 args.model = model
                 args.d = dimension
@@ -30,7 +29,7 @@ if __name__ == "__main__":
             for dimension in dimensions[1:]:
                 args.model = model
                 args.d = dimension
-                args.r = dimension//10
+                args.r = dimension//5
                 sinedistance_score, score = run(args)
                 sinedistance_scores[model].append(sinedistance_score)
                 downstream_scores[model].append(score)
@@ -50,7 +49,7 @@ if __name__ == "__main__":
                 sinedistance_score, score = run(args)
                 sinedistance_scores[model].append(sinedistance_score)
                 downstream_scores[model].append(score)
-    with open(f"{args.experiment}_sinedistance.csv", "w+", newline='') as f:
+    with open(f"{args.ckptfldr}/{args.experiment}_sinedistance_{args.seed}.csv", "w+", newline='') as f:
         writer = csv.writer(f)
 
         if args.experiment == "increase_dimension_d":
@@ -61,7 +60,7 @@ if __name__ == "__main__":
             writer.writerow(noise_sigmas)
         writer.writerow(sinedistance_scores["ae"])
         writer.writerow(sinedistance_scores["cl"])
-    with open(f"{args.experiment}_downstream_score.csv", "w+", newline='') as f:
+    with open(f"{args.ckptfldr}/{args.experiment}_downstream_score_{args.seed}.csv", "w+", newline='') as f:
         writer = csv.writer(f)
         if args.experiment == "increase_dimension_d":
             writer.writerow(dimensions)
@@ -71,3 +70,12 @@ if __name__ == "__main__":
             writer.writerow(noise_sigmas)
         writer.writerow(downstream_scores["ae"])
         writer.writerow(downstream_scores["cl"])
+
+
+if __name__ == "__main__":
+    args = obtain_args()
+    seeds = range(1)
+
+    for seed in seeds:
+        args.seed = seed
+        run_all_exp(args)

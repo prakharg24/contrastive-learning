@@ -74,9 +74,6 @@ def auto_encoder(d, r, X, batch_size, num_epochs, lr, single_layer, requires_rel
 
     # Load training data
     train_dataloader = DataLoader(DataHandler(X, flip_mask=True), batch_size=batch_size, shuffle=True, drop_last=True)
-    # for batch in train_dataloader:
-    #     print(batch)
-    #     exit()
     # Model
     model = AutoEncoder(d, r, single_layer, requires_relu)
     # print(model)
