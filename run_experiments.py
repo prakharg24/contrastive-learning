@@ -5,10 +5,10 @@ import csv
 
 def run_all_exp(args):
     # args.experiment = "increase_noise"
-    # args.experiment = "increase_dimension_d"
+    args.experiment = "increase_dimension_d"
     # args.experiment = "increase_dimension_r"
     # args.experiment = "increase_dimension_d_and_r"
-    args.experiment = "increase_n"
+    # args.experiment = "increase_n"
 
     sinedistance_scores = {}
     downstream_scores = {}
@@ -74,7 +74,7 @@ def run_all_exp(args):
 
 if __name__ == "__main__":
     args = obtain_args()
-    seeds = range(2)
+    seeds = range(10)
 
     for seed in seeds:
         args.seed = seed

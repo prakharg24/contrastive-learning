@@ -52,7 +52,8 @@ def run(args):
             weight_matrix = model.linear.weight.cpu().detach().numpy()
 
         ## Test matrix U-star
-        sinedistance_score = sinedistance_eigenvectors(generator.get_ustar(), weight_matrix)
+        gold_ustar = generator.get_ustar()
+        sinedistance_score = sinedistance_eigenvectors(gold_ustar, weight_matrix)
         print("Sine Distance to U* : %f" % sinedistance_score)
 
         weight_matrix = weight_matrix.T
@@ -62,11 +63,14 @@ def run(args):
                          representations_train, y_train,
                          representations_test, y_test)
 
-        gold_score = downstream_score(args.dwn_mode, args.dwn_model,
-                         r_train, y_train,
-                         r_test, y_test)
+        baseline_rep_train = np.matmul(X_train, gold_ustar)
+        baseline_rep_test = np.matmul(X_test, gold_ustar)
 
-        return sinedistance_score, abs(score - gold_score)
+        baseline_score = downstream_score(args.dwn_mode, args.dwn_model,
+                         baseline_rep_train, y_train,
+                         baseline_rep_test, y_test)
+
+        return sinedistance_score, abs(score - baseline_score)
     if args.mode=='gold':
         downstream_score(args.dwn_mode, args.dwn_model,
                          r_train, y_train,
