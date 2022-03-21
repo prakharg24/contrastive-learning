@@ -74,7 +74,7 @@ def run_all_exp(args):
 
 if __name__ == "__main__":
     args = obtain_args()
-    seeds = range(1)
+    seeds = range(2)
 
     for seed in seeds:
         args.seed = seed

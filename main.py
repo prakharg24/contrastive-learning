@@ -61,7 +61,12 @@ def run(args):
         score = downstream_score(args.dwn_mode, args.dwn_model,
                          representations_train, y_train,
                          representations_test, y_test)
-        return sinedistance_score, score
+
+        gold_score = downstream_score(args.dwn_mode, args.dwn_model,
+                         r_train, y_train,
+                         r_test, y_test)
+
+        return sinedistance_score, abs(score - gold_score)
     if args.mode=='gold':
         downstream_score(args.dwn_mode, args.dwn_model,
                          r_train, y_train,
