@@ -35,7 +35,7 @@ def plot_graph(experiment, metric, seeds):
     plt.clf()
 
 if __name__ == "__main__":
-    seeds = range(8)
+    seeds = range(10)
 
     experiment = "increase_n"
     # experiment = "increase_dimension_d"

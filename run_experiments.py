@@ -74,8 +74,8 @@ def run_all_exp(args):
 
 if __name__ == "__main__":
     args = obtain_args()
-    seeds = range(8, 10)
-    # seeds = range(10)
+    # seeds = range(8, 10)
+    seeds = range(10)
 
     for seed in seeds:
         args.seed = seed
