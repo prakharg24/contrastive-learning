@@ -5,10 +5,12 @@ import csv
 
 def run_all_exp(args):
     # args.experiment = "increase_noise"
+    # args.experiment = "increase_noise_homogenous"
     # args.experiment = "increase_dimension_d"
     # args.experiment = "increase_dimension_r"
+    args.experiment = "increase_dimension_r_model"
     # args.experiment = "increase_dimension_d_and_r"
-    args.experiment = "increase_n"
+    # args.experiment = "increase_n"
 
     sinedistance_scores = {}
     downstream_scores = {}
@@ -24,12 +26,11 @@ def run_all_exp(args):
                 sinedistance_score, score = run(args)
                 sinedistance_scores[model].append(sinedistance_score)
                 downstream_scores[model].append(score)
-        if args.experiment == "increase_dimension_d_and_r":
-            dimensions = ["Dimension", 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110]
+        if args.experiment == "increase_dimension_r_model":
+            dimensions = ["Model Representation", 2, 5, 10, 20, 40]
             for dimension in dimensions[1:]:
                 args.model = model
-                args.d = dimension
-                args.r = dimension//5
+                args.r_model = dimension
                 sinedistance_score, score = run(args)
                 sinedistance_scores[model].append(sinedistance_score)
                 downstream_scores[model].append(score)
@@ -42,10 +43,19 @@ def run_all_exp(args):
                 sinedistance_scores[model].append(sinedistance_score)
                 downstream_scores[model].append(score)
         if args.experiment == "increase_noise":
-            noise_sigmas = ["Noise Sigma", 0.01, 0.1, 0.2, 0.5, 1, 2, 3, 4, 5]
+            noise_sigmas = ["Noise Sigma", 0.01, 0.1, 0.2, 0.5, 1., 2., 3., 4., 5.]
             for noise_sigma in noise_sigmas[1:]:
                 args.model = model
                 args.noise_sigma = noise_sigma
+                sinedistance_score, score = run(args)
+                sinedistance_scores[model].append(sinedistance_score)
+                downstream_scores[model].append(score)
+        if args.experiment == "increase_noise_homogenous":
+            noise_sigmas = ["Noise Sigma (Homogenous)", 0.01, 0.1, 0.2, 0.5, 1., 2., 3., 4., 5.]
+            for noise_sigma in noise_sigmas[1:]:
+                args.model = model
+                args.noise_sigma = noise_sigma
+                args.het_bound = 1.
                 sinedistance_score, score = run(args)
                 sinedistance_scores[model].append(sinedistance_score)
                 downstream_scores[model].append(score)
@@ -54,9 +64,13 @@ def run_all_exp(args):
 
         if args.experiment == "increase_dimension_d":
             writer.writerow(dimensions)
+        if args.experiment == "increase_dimension_r_model":
+            writer.writerow(dimensions)
         if args.experiment == "increase_n":
             writer.writerow(n_values)
         if args.experiment == "increase_noise":
+            writer.writerow(noise_sigmas)
+        if args.experiment == "increase_noise_homogenous":
             writer.writerow(noise_sigmas)
         writer.writerow(sinedistance_scores["ae"])
         writer.writerow(sinedistance_scores["cl"])
@@ -64,9 +78,13 @@ def run_all_exp(args):
         writer = csv.writer(f)
         if args.experiment == "increase_dimension_d":
             writer.writerow(dimensions)
+        if args.experiment == "increase_dimension_r_model":
+            writer.writerow(dimensions)
         if args.experiment == "increase_n":
             writer.writerow(n_values)
         if args.experiment == "increase_noise":
+            writer.writerow(noise_sigmas)
+        if args.experiment == "increase_noise_homogenous":
             writer.writerow(noise_sigmas)
         writer.writerow(downstream_scores["ae"])
         writer.writerow(downstream_scores["cl"])
