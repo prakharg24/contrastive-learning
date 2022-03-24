@@ -37,9 +37,12 @@ def plot_graph(experiment, metric, seeds):
 if __name__ == "__main__":
     seeds = range(10)
 
-    experiment = "increase_n"
+    # experiment = "increase_n"
     # experiment = "increase_dimension_d"
     # experiment = "increase_dimension_d_and_r"
+    # experiment = "increase_noise"
+    # experiment = "increase_noise_homogenous"
+    experiment = "increase_dimension_r_model"
 
     metric = "sinedistance"
     plot_graph(experiment, metric, seeds)
