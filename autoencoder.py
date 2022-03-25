@@ -9,14 +9,6 @@ from tqdm import tqdm
 
 from contrastive_learning import DataHandler
 
-'''
-POTENTIAL CHANGES FOR EXPERIMENTS:
-
-1. Non-linear Auto-Encoder [Change activation to non-linear, will it make any change?]
-2. Change in loss function [TODO after theoretical considerations. Currently using MSE Loss]
-3. Learn noise [TODO how? Is it a part of relaxing loss functions?]
-4. How about latent representation comparisons? [Implemented retrieval]
-'''
 
 class AutoEncoder(nn.Module):
     def __init__(self, d, r, single_layer, requires_relu):
@@ -68,12 +60,12 @@ def sequential_linear_block(in_layers, out_layers, requires_relu=False):
 def regularization_loss(weight, lam):
     return lam / 2 * torch.linalg.matrix_norm(torch.square(torch.matmul(weight, weight.T)), ord='fro')
 
-def auto_encoder(d, r, X, batch_size, num_epochs, lr, single_layer, requires_relu, lam, patience, cuda=True):
+def auto_encoder(d, r, X, batch_size, num_epochs, lr, single_layer, requires_relu, lam, patience, mask_percentage=0.5, cuda=True):
     X = torch.tensor(X)
     device = 'cuda' if cuda else 'cpu'
 
     # Load training data
-    train_dataloader = DataLoader(DataHandler(X, flip_mask=True), batch_size=batch_size, shuffle=True, drop_last=True)
+    train_dataloader = DataLoader(DataHandler(X, flip_mask=True, mask_percentage=mask_percentage), batch_size=batch_size, shuffle=True, drop_last=True)
     # Model
     model = AutoEncoder(d, r, single_layer, requires_relu)
     # print(model)

@@ -24,7 +24,9 @@ def run(args):
         if args.model=='ae':
             model = auto_encoder(args.d, args.r_model, X_train,
                                  batch_size=args.batch_size, num_epochs=args.epochs, lr=args.lr,
-                                 single_layer=True, requires_relu=False, lam=args.lam, patience=args.patience, cuda=args.cuda)
+                                 single_layer=True, requires_relu=False,
+                                 lam=args.lam, patience=args.patience, 
+                                 mask_percentage=args.mask_percentage, cuda=args.cuda)
             torch.save(model, os.path.join(args.ckptfldr, 'ae_baseline.pt'))
 
         elif args.model=='cl':
@@ -100,11 +102,12 @@ def obtain_args():
     parser.add_argument("--r_model", type=int, default=10, help="Representation Dimension of Model Output")
     parser.add_argument("--lr", type=float, default=3e-4, help="Learning rate")
     parser.add_argument("--batch_size", type=int, default=32, help="Batch Size for Training")
-    parser.add_argument("--epochs", type=int, default=20000, help="Number of Steps for Training")
+    parser.add_argument("--epochs", type=int, default=50, help="Number of Steps for Training")
     parser.add_argument("--train_size", type=int, default=20000, help="Number of data points of unsupervised learning")
     parser.add_argument("--test_size", type=int, default=1000, help="Number of data points of testing")
     parser.add_argument("--lam", type=float, default=1e-3, help="Weight of regularization term")
     parser.add_argument("--patience", type=int, default=50, help="Patience for early stopping")
+    parser.add_argument("--mask_percentage", type=float, default=0.5, help="Percentage of masking for data augmentation")
 
     ## Parameters for Downstream Task
     parser.add_argument("--dwn_mode", default="reg", help="Classification mode for downstream labels")

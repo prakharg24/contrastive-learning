@@ -10,14 +10,17 @@ def run_all_exp(args):
     # args.experiment = "increase_noise"
     # args.experiment = "increase_noise_homogenous"
     # args.experiment = "increase_dimension_d"
-    # args.experiment = "increase_dimension_r"
     # args.experiment = "increase_dimension_r_model"
     # args.experiment = "increase_dimension_d_and_r"
     # args.experiment = "increase_n"
     # args.experiment = "bound_cl_with_d"
-    args.experiment = "bound_cl_with_r"
+    # args.experiment = "bound_cl_with_r_model"
     # args.experiment = "bound_cl_with_n"
-    bound_experiments = ["bound_cl_with_d", "bound_cl_with_r", "bound_cl_with_n"]
+    args.experiment = "increase_masking_ae"
+    generic_experiments = ["increase_noise", "increase_noise_homogenous", "increase_dimension_d",
+                            "increase_dimension_r_model", "increase_dimension_d_and_r", "increase_n"]
+    cl_bound_experiments = ["bound_cl_with_d", "bound_cl_with_r_model", "bound_cl_with_n"]
+    ae_experiments = ["increase_masking_ae"]
 
     sinedistance_scores = {}
     downstream_scores = {}
@@ -79,9 +82,10 @@ def run_all_exp(args):
                 sinedistance_upper_bound = cl_theoretical_upper_bound(args.d, args.r_model, args.train_size)
                 sinedistance_scores[model].append(sinedistance_score)
                 sinedistance_upper_bounds[model].append(sinedistance_upper_bound)
-        if args.experiment == "bound_cl_with_r":
+        if args.experiment == "bound_cl_with_r_model":
             dimensions = ["Model Representation", 2, 5, 10, 20, 40]
             for dimension in dimensions[1:]:
+                if model == "ae": break
                 args.model = model
                 args.r_model = dimension
                 sinedistance_score, _ = run(args)
@@ -91,12 +95,22 @@ def run_all_exp(args):
         if args.experiment == "bound_cl_with_n":
             n_values = ["n", 1000, 2000, 3000, 4000, 5000, 10000, 20000, 30000, 40000, 50000]
             for n in n_values[1:]:
+                if model == "ae": break
                 args.model = model
                 args.train_size = n
                 sinedistance_score, _ = run(args)
                 sinedistance_upper_bound = cl_theoretical_upper_bound(args.d, args.r_model, args.train_size)
                 sinedistance_scores[model].append(sinedistance_score)
                 sinedistance_upper_bounds[model].append(sinedistance_upper_bound)
+        if args.experiment == "increase_masking_ae":
+            masks = ["Masking Percentage", 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+            for mask in masks[1:]:
+                if model == "cl": break
+                args.model = model
+                args.mask_percentage = mask
+                sinedistance_score, score = run(args)
+                sinedistance_scores[model].append(sinedistance_score)
+                downstream_scores[model].append(score)
     with open(f"{args.ckptfldr}/{args.experiment}_sinedistance_{args.seed}.csv", "w+", newline='') as f:
         writer = csv.writer(f)
 
@@ -112,29 +126,37 @@ def run_all_exp(args):
             writer.writerow(noise_sigmas)
         if args.experiment == "bound_cl_with_d":
             writer.writerow(dimensions)
-        if args.experiment == "bound_cl_with_r":
+        if args.experiment == "bound_cl_with_r_model":
             writer.writerow(dimensions)
         if args.experiment == "bound_cl_with_n":
             writer.writerow(n_values)
-        if args.experiment not in bound_experiments:
+        if args.experiment == "increase_masking_ae":
+            writer.writerow(masks)
+            writer.writerow(sinedistance_scores["ae"])           
+
+        if args.experiment in generic_experiments:
             writer.writerow(sinedistance_scores["ae"])
             writer.writerow(sinedistance_scores["cl"])
-        else:
+        elif args.experiment in cl_bound_experiments:
             writer.writerow(sinedistance_scores["cl"])
             writer.writerow(sinedistance_upper_bounds["cl"])
-    if args.experiment not in bound_experiments:
-        with open(f"{args.ckptfldr}/{args.experiment}_downstream_score_{args.seed}.csv", "w+", newline='') as f:
-            writer = csv.writer(f)
-            if args.experiment == "increase_dimension_d":
-                writer.writerow(dimensions)
-            if args.experiment == "increase_dimension_r_model":
-                writer.writerow(dimensions)
-            if args.experiment == "increase_n":
-                writer.writerow(n_values)
-            if args.experiment == "increase_noise":
-                writer.writerow(noise_sigmas)
-            if args.experiment == "increase_noise_homogenous":
-                writer.writerow(noise_sigmas)
+    with open(f"{args.ckptfldr}/{args.experiment}_downstream_score_{args.seed}.csv", "w+", newline='') as f:
+        writer = csv.writer(f)
+        if args.experiment == "increase_dimension_d":
+            writer.writerow(dimensions)
+        if args.experiment == "increase_dimension_r_model":
+            writer.writerow(dimensions)
+        if args.experiment == "increase_n":
+            writer.writerow(n_values)
+        if args.experiment == "increase_noise":
+            writer.writerow(noise_sigmas)
+        if args.experiment == "increase_noise_homogenous":
+            writer.writerow(noise_sigmas)
+        if args.experiment == "increase_masking_ae":
+            writer.writerow(masks)
+            writer.writerow(downstream_scores["ae"])
+    
+        if args.experiment in generic_experiments:
             writer.writerow(downstream_scores["ae"])
             writer.writerow(downstream_scores["cl"])
 

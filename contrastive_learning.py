@@ -181,8 +181,7 @@ class SelfconLoss(nn.Module):
 
 
 class DataHandler(Dataset):
-    def generate_random_mask(self, size):
-        mask_percentage = 0.5
+    def generate_random_mask(self, size, mask_percentage=0.5):
         mask_size = int(mask_percentage*size)
         random_mask = np.concatenate([np.ones(size - mask_size), np.zeros(mask_size)])
         np.random.shuffle(random_mask)
@@ -190,15 +189,16 @@ class DataHandler(Dataset):
         random_mask = np.diag(random_mask)
         return torch.tensor(random_mask)
 
-    def __init__(self, X, flip_mask=False):
+    def __init__(self, X, flip_mask=False, mask_percentage=0.5):
         self.X = X
         self.input_size = X.size()[1]
         self.flip_mask = flip_mask
-        self.mask1 = self.generate_random_mask(self.input_size)
+        self.mask_percentage = mask_percentage
+        self.mask1 = self.generate_random_mask(self.input_size, self.mask_percentage)
         if flip_mask:
             self.mask2 = torch.diag(1 - torch.diag(self.mask1))
         else:
-            self.mask2 = self.generate_random_mask(self.input_size)
+            self.mask2 = self.generate_random_mask(self.input_size, self.mask_percentage)
 
     def __getitem__(self, index):
         x = self.X[index]
