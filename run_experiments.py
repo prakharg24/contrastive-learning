@@ -14,12 +14,12 @@ def run_all_exp(args):
     # args.experiment = "increase_dimension_d_and_r"
     # args.experiment = "increase_n"
     # args.experiment = "bound_cl_with_d"
-    # args.experiment = "bound_cl_with_r_model"
+    args.experiment = "bound_cl_with_r"
     # args.experiment = "bound_cl_with_n"
-    args.experiment = "increase_masking_ae"
+    # args.experiment = "increase_masking_ae"
     generic_experiments = ["increase_noise", "increase_noise_homogenous", "increase_dimension_d",
                             "increase_dimension_r_model", "increase_dimension_d_and_r", "increase_n"]
-    cl_bound_experiments = ["bound_cl_with_d", "bound_cl_with_r_model", "bound_cl_with_n"]
+    cl_bound_experiments = ["bound_cl_with_d", "bound_cl_with_r", "bound_cl_with_n"]
     ae_experiments = ["increase_masking_ae"]
 
     sinedistance_scores = {}
@@ -82,12 +82,13 @@ def run_all_exp(args):
                 sinedistance_upper_bound = cl_theoretical_upper_bound(args.d, args.r_model, args.train_size)
                 sinedistance_scores[model].append(sinedistance_score)
                 sinedistance_upper_bounds[model].append(sinedistance_upper_bound)
-        if args.experiment == "bound_cl_with_r_model":
+        if args.experiment == "bound_cl_with_r":
             dimensions = ["Model Representation", 2, 5, 10, 20, 40]
             for dimension in dimensions[1:]:
                 if model == "ae": break
                 args.model = model
                 args.r_model = dimension
+                args.r = dimension
                 sinedistance_score, _ = run(args)
                 sinedistance_upper_bound = cl_theoretical_upper_bound(args.d, args.r_model, args.train_size)
                 sinedistance_scores[model].append(sinedistance_score)
@@ -126,7 +127,7 @@ def run_all_exp(args):
             writer.writerow(noise_sigmas)
         if args.experiment == "bound_cl_with_d":
             writer.writerow(dimensions)
-        if args.experiment == "bound_cl_with_r_model":
+        if args.experiment == "bound_cl_with_r":
             writer.writerow(dimensions)
         if args.experiment == "bound_cl_with_n":
             writer.writerow(n_values)

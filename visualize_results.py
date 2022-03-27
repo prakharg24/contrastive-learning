@@ -6,7 +6,7 @@ def plot_graph(experiment, metric, seeds):
 
     generic_experiments = ["increase_noise", "increase_noise_homogenous", "increase_dimension_d",
                             "increase_dimension_r_model", "increase_dimension_d_and_r", "increase_n"]
-    cl_bound_experiments = ["bound_cl_with_d", "bound_cl_with_r_model", "bound_cl_with_n"]
+    cl_bound_experiments = ["bound_cl_with_d", "bound_cl_with_r", "bound_cl_with_n"]
     ae_experiments = ["increase_masking_ae"]
     bound_metrics = ["sinedistance"]
  
@@ -80,9 +80,9 @@ if __name__ == "__main__":
     # experiment = "increase_noise_homogenous"
     # experiment = "increase_dimension_r_model"
     # experiment = "bound_cl_with_d"
-    # experiment = "bound_cl_with_r_model"
+    experiment = "bound_cl_with_r"
     # experiment = "bound_cl_with_n"
-    experiment = "increase_masking_ae"
+    # experiment = "increase_masking_ae"
 
     metric = "sinedistance"
     plot_graph(experiment, metric, seeds)
