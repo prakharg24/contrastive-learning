@@ -12,9 +12,9 @@ def run_all_exp(args):
     # args.experiment = "increase_dimension_d"
     # args.experiment = "increase_dimension_r_model"
     # args.experiment = "increase_dimension_d_and_r"
-    # args.experiment = "increase_n"
+    args.experiment = "increase_n"
     # args.experiment = "bound_cl_with_d"
-    args.experiment = "bound_cl_with_r"
+    # args.experiment = "bound_cl_with_r"
     # args.experiment = "bound_cl_with_n"
     # args.experiment = "increase_masking_ae"
     generic_experiments = ["increase_noise", "increase_noise_homogenous", "increase_dimension_d",
@@ -24,7 +24,7 @@ def run_all_exp(args):
 
     sinedistance_scores = {}
     downstream_scores = {}
-    
+
     sinedistance_upper_bounds = {}
     for model in ["ae", "cl"]:
         sinedistance_scores[model] = [model]
@@ -133,7 +133,7 @@ def run_all_exp(args):
             writer.writerow(n_values)
         if args.experiment == "increase_masking_ae":
             writer.writerow(masks)
-            writer.writerow(sinedistance_scores["ae"])           
+            writer.writerow(sinedistance_scores["ae"])
 
         if args.experiment in generic_experiments:
             writer.writerow(sinedistance_scores["ae"])
@@ -156,7 +156,7 @@ def run_all_exp(args):
         if args.experiment == "increase_masking_ae":
             writer.writerow(masks)
             writer.writerow(downstream_scores["ae"])
-    
+
         if args.experiment in generic_experiments:
             writer.writerow(downstream_scores["ae"])
             writer.writerow(downstream_scores["cl"])
