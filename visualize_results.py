@@ -16,8 +16,8 @@ def plot_graph(experiment, metric, seeds):
     model_names = {'ae': 'Auto Encoder', 'cl': 'Contrastive Learning'}
     model_colors = {'ae': 'orange', 'cl': 'blue'}
     metric_labels = {'sinedistance': "Sine Distance", 'downstream_score': "Downstream Risk"}
-    value_labels = {'increase_dimension_d': "Input Dimension (d)", 'increase_dimension_r_model': "Latent Dimension of Model (r_model)", 'increase_n': "Number of Samples (N)", 
-                    'bound_cl_with_d': "Input Dimension (d)", 'bound_cl_with_r': "Latent Dimension (r)", 'bound_cl_with_n': "Number of Samples (N)",
+    value_labels = {'increase_dimension_d': "Input Dimension (d)", 'increase_dimension_r_model': "Latent Dimension of Model (r_model)", 'increase_n': "Number of Samples (n)", 
+                    'bound_cl_with_d': "Input Dimension (d)", 'bound_cl_with_r': "Latent Dimension (r)", 'bound_cl_with_n': "Number of Samples (n)",
                     'increase_masking_ae': "Mask Percentage used in Augmentation", 'increase_noise': "Noise Sigma", 'increase_noise_homogenous': "(Homogeneous) Noise Sigma"}
     result_dict = {'ae': [], 'cl': []}
     bound_dict = {'empirical': [], 'theoretical': []}
