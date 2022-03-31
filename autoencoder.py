@@ -8,6 +8,7 @@ import numpy as np
 from tqdm import tqdm
 
 from contrastive_learning import DataHandler
+import torch.nn.functional as F
 
 '''
 POTENTIAL CHANGES FOR EXPERIMENTS:
@@ -31,30 +32,26 @@ class AutoEncoder(nn.Module):
             self.encoder = nn.Linear(d, r, bias=False)
             self.decoder = nn.Linear(r, d, bias=False)
         else:
-            layer_dim = [self.input_dim]
-            hidden_dim = 2**math.ceil(math.log(self.input_dim, 2))
-            layer_dim.append(hidden_dim)
-            while hidden_dim > self.latent_dim:
-                hidden_dim = int(max(self.latent_dim, hidden_dim/2))
-                layer_dim.append(hidden_dim)
+            self.encoder_1 = nn.Linear(d, int((r+d)/2), bias=True)
+            self.encoder_2 = nn.Linear(int((r+d)/2), r, bias=True)
+            self.decoder_1 = nn.Linear(r, int((r+d)/2), bias=True)
+            self.decoder_2 = nn.Linear(int((r+d)/2), d, bias=True)
 
-            num_layers = len(layer_dim)
-            encoder_layers = [sequential_linear_block(in_layers, out_layers, requires_relu) for in_layers, out_layers in zip(layer_dim[:num_layers-1], layer_dim[1:num_layers-1])]
-            self.encoder = nn.Sequential(*encoder_layers, nn.Linear(2**math.ceil(math.log(self.latent_dim, 2)), self.latent_dim))
-
-            layer_dim.reverse()
-            decoder_layers = [sequential_linear_block(in_layers, out_layers, requires_relu) for in_layers, out_layers in zip(layer_dim[:num_layers-1], layer_dim[1:num_layers-1])]
-            self.decoder = nn.Sequential(*decoder_layers, nn.Linear(2**math.ceil(math.log(self.input_dim, 2)), self.input_dim))
 
     def forward(self, x):
-        latent_rep = self.encoder(x)
-        prediction = self.decoder(latent_rep)
-
+        if self.single_layer:
+            latent_rep = self.encoder(x)
+            prediction = self.decoder(latent_rep)
+        else:
+            latent_rep = F.relu(self.encoder_2(F.relu(self.encoder_1(x))))
+            prediction = self.decoder_2(F.relu(self.decoder_1(latent_rep)))
         return prediction
 
     def get_latent_representation(self, x):
-        latent_rep = self.encoder(x)
-
+        if self.single_layer:
+            latent_rep = self.encoder(x)
+        else:
+            latent_rep = F.relu(self.encoder_2(F.relu(self.encoder_1(x))))
         return latent_rep
 
 def sequential_linear_block(in_layers, out_layers, requires_relu=False):
@@ -68,12 +65,12 @@ def sequential_linear_block(in_layers, out_layers, requires_relu=False):
 def regularization_loss(weight, lam):
     return lam / 2 * torch.linalg.matrix_norm(torch.square(torch.matmul(weight, weight.T)), ord='fro')
 
-def auto_encoder(d, r, X, batch_size, num_epochs, lr, single_layer, requires_relu, lam, patience, cuda=True):
+def auto_encoder(d, r, X, batch_size, num_epochs, lr, single_layer, requires_relu, lam, patience, mask_percentage, cuda=True):
     X = torch.tensor(X)
     device = 'cuda' if cuda else 'cpu'
 
     # Load training data
-    train_dataloader = DataLoader(DataHandler(X, flip_mask=True), batch_size=batch_size, shuffle=True, drop_last=True)
+    train_dataloader = DataLoader(DataHandler(X, mask_percentage, flip_mask=False), batch_size=batch_size, shuffle=True, drop_last=True)
     # Model
     model = AutoEncoder(d, r, single_layer, requires_relu)
     # print(model)
@@ -93,7 +90,8 @@ def auto_encoder(d, r, X, batch_size, num_epochs, lr, single_layer, requires_rel
             batch_data = batch_data.to(device)
             prediction = model(batch_data)
             loss = criterion(prediction, batch_data)
-            loss += regularization_loss(model.encoder.weight, lam)
+            if single_layer:
+                loss += regularization_loss(model.encoder.weight, lam)
             loss.backward()
             optimizer.step()
             loss_log.set_description_str(f"Epoch [{epoch+1}/{num_epochs}] Loss: {loss / len(train_dataloader)}")

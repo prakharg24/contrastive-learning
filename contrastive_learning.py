@@ -11,95 +11,7 @@ from tqdm import tqdm
 from test_utils import sinedistance_eigenvectors
 import torch
 import torch.nn as nn
-
-
-class SupConLoss(nn.Module):
-    """Supervised Contrastive Learning: https://arxiv.org/pdf/2004.11362.pdf.
-    It also supports the unsupervised contrastive loss in SimCLR"""
-    def __init__(self, temperature=0.5, contrast_mode='all',
-                 base_temperature=0.5):
-        super(SupConLoss, self).__init__()
-        self.temperature = temperature
-        self.contrast_mode = contrast_mode
-        self.base_temperature = base_temperature
-
-    def forward(self, features, labels=None, mask=None):
-        """Compute loss for model. If both `labels` and `mask` are None,
-        it degenerates to SimCLR unsupervised loss:
-        https://arxiv.org/pdf/2002.05709.pdf
-        Args:
-            features: hidden vector of shape [bsz, n_views, ...].
-            labels: ground truth of shape [bsz].
-            mask: contrastive mask of shape [bsz, bsz], mask_{i,j}=1 if sample j
-                has the same class as sample i. Can be asymmetric.
-        Returns:
-            A loss scalar.
-        """
-        device = (torch.device('cuda')
-                  if features.is_cuda
-                  else torch.device('cpu'))
-
-        if len(features.shape) < 3:
-            raise ValueError('`features` needs to be [bsz, n_views, ...],'
-                             'at least 3 dimensions are required')
-        if len(features.shape) > 3:
-            features = features.view(features.shape[0], features.shape[1], -1)
-
-        batch_size = features.shape[0]
-        if labels is not None and mask is not None:
-            raise ValueError('Cannot define both `labels` and `mask`')
-        elif labels is None and mask is None:
-            mask = torch.eye(batch_size, dtype=torch.float32).to(device)
-        elif labels is not None:
-            labels = labels.contiguous().view(-1, 1)
-            if labels.shape[0] != batch_size:
-                raise ValueError('Num of labels does not match num of features')
-            mask = torch.eq(labels, labels.T).float().to(device)
-        else:
-            mask = mask.float().to(device)
-
-        contrast_count = features.shape[1]
-        contrast_feature = torch.cat(torch.unbind(features, dim=1), dim=0)
-        if self.contrast_mode == 'one':
-            anchor_feature = features[:, 0]
-            anchor_count = 1
-        elif self.contrast_mode == 'all':
-            anchor_feature = contrast_feature
-            anchor_count = contrast_count
-        else:
-            raise ValueError('Unknown mode: {}'.format(self.contrast_mode))
-
-        # compute logits
-        anchor_dot_contrast = torch.div(
-            torch.matmul(anchor_feature, contrast_feature.T),
-            self.temperature)
-        # for numerical stability
-        logits_max, _ = torch.max(anchor_dot_contrast, dim=1, keepdim=True)
-        logits = anchor_dot_contrast - logits_max.detach()
-
-        # tile mask
-        mask = mask.repeat(anchor_count, contrast_count)
-        # mask-out self-contrast cases
-        logits_mask = torch.scatter(
-            torch.ones_like(mask),
-            1,
-            torch.arange(batch_size * anchor_count).view(-1, 1).to(device),
-            0
-        )
-        mask = mask * logits_mask
-
-        # compute log_prob
-        exp_logits = torch.exp(logits) * logits_mask
-        log_prob = logits - torch.log(exp_logits.sum(1, keepdim=True))
-
-        # compute mean of log-likelihood over positive
-        mean_log_prob_pos = (mask * log_prob).sum(1) / mask.sum(1)
-
-        # loss
-        loss = - (self.temperature / self.base_temperature) * mean_log_prob_pos
-        loss = loss.view(anchor_count, batch_size).mean()
-
-        return loss
+import torch.nn.functional as F
 
 
 class NT_Xent(nn.Module):
@@ -155,34 +67,12 @@ def triplet_contrastive_loss(x, B_pos, B_neg):
     return loss
 
 
-class SelfconLoss(nn.Module):
-    def __init__(self, lam):
-        super(SelfconLoss, self).__init__()
-        self.lam = lam
-
-    def regularization_loss(self, model):
-        return self.lam / 2 * torch.linalg.matrix_norm(torch.square(torch.matmul(model.linear.weight, model.linear.weight.T)), ord='fro')
-
-    def forward(self, z_i, z_j, model):
-        loss = 0
-        n = len(z_i)
-        for index, (d_i, d_j) in enumerate(zip(z_i, z_j)):
-            loss += 2 * torch.dot(d_i, d_j)
-            mask = torch.ones(n).double().cuda()
-            mask[index] = 0
-
-            loss -= torch.dot(torch.matmul(z_i, d_i), mask)/(2 * n - 2)
-            loss -= torch.dot(torch.matmul(z_i, d_j), mask)/(2 * n - 2)
-            loss -= torch.dot(torch.matmul(z_j, d_i), mask)/(2 * n - 2)
-            loss -= torch.dot(torch.matmul(z_j, d_j), mask)/(2 * n - 2)
-        loss = -loss / (2 * n)
-        loss += self.regularization_loss(model)
-        return loss
+def regularization_loss(lam, model):
+    return lam / 2 * torch.linalg.matrix_norm(torch.square(torch.matmul(model.linear.weight, model.linear.weight.T)), ord='fro')
 
 
 class DataHandler(Dataset):
-    def generate_random_mask(self, size):
-        mask_percentage = 0.5
+    def generate_random_mask(self, size, mask_percentage):
         mask_size = int(mask_percentage*size)
         random_mask = np.concatenate([np.ones(size - mask_size), np.zeros(mask_size)])
         np.random.shuffle(random_mask)
@@ -190,33 +80,39 @@ class DataHandler(Dataset):
         random_mask = np.diag(random_mask)
         return torch.tensor(random_mask)
 
-    def __init__(self, X, flip_mask=False):
+    def __init__(self, X, mask_percentage, flip_mask=False, same_mask=True):
         self.X = X
         self.input_size = X.size()[1]
         self.flip_mask = flip_mask
-        self.mask1 = self.generate_random_mask(self.input_size)
+        self.same_mask = same_mask
+        self.mask_percentage = mask_percentage
+        self.mask1 = self.generate_random_mask(self.input_size, mask_percentage)
         if flip_mask:
             self.mask2 = torch.diag(1 - torch.diag(self.mask1))
         else:
-            self.mask2 = self.generate_random_mask(self.input_size)
+            self.mask2 = self.generate_random_mask(self.input_size, mask_percentage)
 
     def __getitem__(self, index):
         x = self.X[index]
 
         # mask1 = self.generate_random_mask(self.input_size)
-        x1 = torch.matmul(self.mask1, x)
-
-        # if self.flip_mask:
-        #     mask2 = 1 - mask1
-        # else:
-        #     mask2 = self.generate_random_mask(self.input_size)
-        x2 = torch.matmul(self.mask2, x)
+        if self.same_mask:
+            mask1 = self.mask1
+            mask2 = self.mask2
+        else:
+            mask1 = self.generate_random_mask(self.input_size, self.mask_percentage)
+            if self.flip_mask:
+                mask2 = torch.diag(1 - torch.diag(self.mask1))
+            else:
+                mask2 = self.generate_random_mask(self.input_size, self.mask_percentage)
+        x1 = torch.matmul(mask1, x)
+        x2 = torch.matmul(mask2, x)
         return x1, x2
 
     def __len__(self):
         return len(self.X)
 
-def train(train_loader, model, criterion, optimizer, loss_fn, device):
+def train(train_loader, model, criterion, optimizer, lam, device, single_layer):
     loss_epoch = 0
     for step, (x_i, x_j) in enumerate(train_loader):
         optimizer.zero_grad()
@@ -226,14 +122,9 @@ def train(train_loader, model, criterion, optimizer, loss_fn, device):
         # positive pair, with encoding
         z_i = model(x_i)
         z_j = model(x_j)
-        if loss_fn == "NTXENT":
-            loss = criterion(z_i, z_j)
-        else:
-            z_i = torch.unsqueeze(z_i, 1)
-            z_j = torch.unsqueeze(z_j, 1)
-
-            batch_views = torch.cat((z_i, z_j), 1)
-            loss = criterion(batch_views)
+        loss = criterion(z_i, z_j)
+        if single_layer:
+            loss += regularization_loss(lam, model)
         loss.backward()
 
         optimizer.step()
@@ -250,21 +141,33 @@ class linear_CL_Model(torch.nn.Module):
         out = self.linear(x)
         return out
 
-def contrastive_training(r, d, x, ustar, loss_fn, batch_size, num_epochs, lr, lam, patience, cuda=True):
+class double_CL_Model(torch.nn.Module):
+    def __init__(self, d, r):
+        super(double_CL_Model, self).__init__()
+        self.linear_1 = torch.nn.Linear(d, int((r+d)/2), bias=True)
+        self.linear_2 = torch.nn.Linear(int((r+d)/2), r, bias=True)
+
+    def forward(self, x):
+        out = self.linear_2(F.relu(self.linear_1(x)))
+        return out
+    def get_latent_representation(self, x):
+        return self.forward(x)
+
+def contrastive_training(r, d, x, ustar, loss_fn, batch_size, num_epochs, single_layer, lr, lam, patience, mask_percentage, cuda=True, flip=True, fix=True):
     # Data Loader
     x = torch.tensor(x)
     device = 'cuda' if cuda else 'cpu'
     # print(f"Train Data Shape: {x.size()}")
-    train_loader = DataLoader(DataHandler(x, flip_mask=True), shuffle=True, batch_size=batch_size, drop_last=True)
+    train_loader = DataLoader(DataHandler(x, mask_percentage, flip_mask=flip, same_mask=fix), shuffle=True, batch_size=batch_size, drop_last=True)
     # Model
-    model = linear_CL_Model(d, r).double().to(device)
+    if single_layer:
+        model = linear_CL_Model(d, r).double().to(device)
+    else:
+        model = double_CL_Model(d, r).double().to(device)
     # print(f"Model Size: {model.linear.weight.size()}")
     # Optimizer
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
-    if loss_fn == "NTXENT":
-        criterion = NT_Xent(batch_size, 0.5, 1)
-    elif loss_fn == "SupConLoss":
-        criterion = SupConLoss()
+    criterion = NT_Xent(batch_size, 0.5, 1)
 
     epoch_iterator = tqdm(range(num_epochs), desc='Epochs')
     # loss_log = tqdm(total=0, position=1, bar_format='{desc}')
@@ -272,7 +175,7 @@ def contrastive_training(r, d, x, ustar, loss_fn, batch_size, num_epochs, lr, la
     min_loss = float("inf")
     best_model = model.state_dict()
     for epoch in epoch_iterator:
-        loss_epoch = train(train_loader, model, criterion, optimizer, loss_fn, device)
+        loss_epoch = train(train_loader, model, criterion, optimizer, lam, device, single_layer)
         if loss_epoch < min_loss:
             min_loss = loss_epoch
             patience_steps = 0
