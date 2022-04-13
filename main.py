@@ -25,7 +25,7 @@ def run(args):
             model = auto_encoder(args.d, args.r_model, X_train,
                                  batch_size=args.batch_size, num_epochs=args.epochs, lr=args.lr,
                                  single_layer=True, requires_relu=False,
-                                 lam=args.lam, patience=args.patience, 
+                                 lam=args.lam, patience=args.patience,
                                  mask_percentage=args.mask_percentage, cuda=args.cuda)
             torch.save(model, os.path.join(args.ckptfldr, 'ae_baseline.pt'))
 
@@ -72,13 +72,12 @@ def run(args):
                          baseline_rep_train, y_train,
                          baseline_rep_test, y_test)
 
-        return sinedistance_score, abs(score - baseline_score)
+        return sinedistance_score, score - baseline_score
+
     if args.mode=='gold':
         downstream_score(args.dwn_mode, args.dwn_model,
                          r_train, y_train,
                          r_test, y_test)
-
-    ## Add more modes if required
 
 
 def obtain_args():
@@ -98,7 +97,6 @@ def obtain_args():
     parser.add_argument("--het_bound", type=float, default=2., help="Heteroskedastic noise ratio bound")
 
     ## Parameters for Training
-    ## Add more and change as required
     parser.add_argument("--r_model", type=int, default=10, help="Representation Dimension of Model Output")
     parser.add_argument("--lr", type=float, default=3e-4, help="Learning rate")
     parser.add_argument("--batch_size", type=int, default=32, help="Batch Size for Training")

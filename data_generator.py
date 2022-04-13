@@ -16,11 +16,6 @@ class SpikedCovarianceDataset():
         u, s, vh = np.linalg.svd(np.random.rand(d, r), full_matrices=False)
         self.ustar = np.matmul(u, vh)
 
-        # Scale U* s.t. incoherence condition is satisfied
-        # incoherence = self.calc_incoherence()
-        # ideal_incoherence = self.get_ideal_incoherence()
-        # self.ustar = self.ustar / math.sqrt(incoherence) * math.sqrt(ideal_incoherence)
-
         ## Creating Optimal Classifier Vector w*
         self.wstar = np.random.rand(r)
         self.wstar = self.wstar / np.linalg.norm(self.wstar)
@@ -28,28 +23,10 @@ class SpikedCovarianceDataset():
         ## Setting label mode to 'classification' or 'regression'
         self.label_mode = label_mode
 
-    def get_ideal_incoherence(self):
-        return self.r * math.log(self.d) / self.d
-
-    def calc_incoherence(self):
-        max_incoherence = 0
-        for i in range(self.d):
-            basis = np.zeros(self.d)
-            basis[i] = 1
-            # incoherence is now the i-th row of U
-            incoherence = np.matmul(basis.T, self.ustar)
-            # Retain the max squared norm
-            max_incoherence = max(max_incoherence, np.linalg.norm(incoherence) ** 2)
-        return max_incoherence
-
     def get_next_batch(self, batch_size=64):
         ## Original Signal z
         signal = np.random.normal(0., self.sigma, self.r*batch_size)
         signal = signal.reshape(self.r, batch_size)
-
-        ## Noise Sigma E
-        # noise = np.random.normal(0., self.noise_sigma, self.d*batch_size)
-        # noise = noise.reshape(self.d, batch_size)
 
         # Heteroskedastic noise
         noise = np.zeros((self.d, batch_size))
@@ -67,6 +44,7 @@ class SpikedCovarianceDataset():
         ## Calculate Inner Product Normalized <z, w*>/v
         inner_product = np.matmul(self.wstar, signal)/self.sigma
         if self.label_mode=='cls':
+            ## NOT APPROPRIATE!! Check report for details
             ## Output labels selected from bernoulli distribution with selected probabilities
             bernoulli_mean = 1/(1 + np.exp(-inner_product))
             output_labels = np.random.binomial(1, bernoulli_mean, size=batch_size)
